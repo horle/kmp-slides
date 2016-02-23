@@ -1,0 +1,120 @@
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\green}[1]{\textcolor{markgreen}{#1}}
+\newcommand{\textgreen}[1]{\textcolor{textgreen}{#1}}
+\newcommand{\gray}[1]{\textcolor{lightgray}{#1}}
+
+\newcolumntype{R}{>{\centering\raggedleft\arraybackslash}X}
+\newcolumntype{L}{>{\centering\raggedright\arraybackslash}X}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+
+\usepackage[firstinits=true,style=ieee-alphabetic,backend=biber]{biblatex}
+\addbibresource{knmopr.bib}
+\renewcommand*{\bibfont}{\small}
+
+\usefonttheme{professionalfonts} % using non standard fonts for beamer
+
+\setbeamercovered{invisible}
+
+\newcommand{\textsb}[1]{{\fontfamily{cmss}\fontseries{sbc}\fontshape{n}\selectfont #1}}
+\newcommand{\tdots}{\; ..\;}
+
+%ALGORITHMICX
+\renewcommand{\algorithmicrequire}{\textcolor{textgreen}{\textbf{Input:}}}
+\renewcommand{\algorithmicensure}{\textcolor{textgreen}{\textbf{Output:}}}
+
+% redefine keywords
+\algrenewcommand\algorithmicfunction{\textcolor{textgreen}{\textbf{function}}}
+\algrenewcommand\algorithmicwhile{\textcolor{textgreen}{\textbf{while}}}
+\algrenewcommand\algorithmicfor{\textcolor{textgreen}{\textbf{for}}}
+\algrenewcommand\algorithmicif{\textcolor{textgreen}{\textbf{if}}}
+\algrenewcommand\algorithmicelse{\textcolor{textgreen}{\textbf{else}}}
+\algrenewcommand\algorithmicend{\textcolor{textgreen}{\textbf{end}}}
+%\algrenewcommand\algorithmicto{\textcolor{textgreen}{\textbf{to}}}
+\algrenewcommand\algorithmicdo{\textcolor{textgreen}{\textbf{do}}}
+\algrenewcommand\algorithmicreturn{\textcolor{textgreen}{\textbf{return}}}
+\algrenewcommand\algorithmicthen{\textcolor{textgreen}{\textbf{then}}}
+
+% redefine comments
+\algrenewcommand{\algorithmiccomment}[1]{{\color{textgreen!50}\textit{//#1}}}
+
+%COLORBOX
+\newtcolorbox{mybox}[1]{
+colback=chameleongreen2!30,
+colbacktitle=chameleongreen1!50,
+coltitle=black,
+colframe=textgreen,
+boxrule=1pt,
+titlerule=0pt,
+arc=10pt,
+title={\strut\textcolor{textgreen}{\textbf{#1}}}
+}
+
+\newcounter{definition}
+\resetcounteronoverlays{definition}
+\newcommand{\define}{\refstepcounter{definition}\thedefinition}
+\newenvironment{defi}{
+	\begin{mybox}{Definition \define}
+}
+{\end{mybox}}
+
+\author[Felix Kußmaul]{\Large Felix Kußmaul}
+\title[Der KMP-Algorithmus]{\LARGE Der Knuth-Morris-Pratt-Algorithmus}
+\subtitle{Einführung und Analyse}
+\institute[Uni Siegen]{\normalsize Seminar für Theoretische Informatik\\ Universität Siegen}
+\date[29.\ Februar 2016]{\normalsize 29.\ Februar 2016}
+
+\usetheme[pageofpages=/,% String used between the current page and the
+                         % total page count.
+          titlepagelogo=logo-siegen,% Logo for the first page.
+          bullet=triangle,% Use circles instead of squares for bullets.
+          titleline=true,% Show a line below the frame title.
+          alternativetitlepage=true,% Use the fancy title page.
+          ]{Torino}
+    
+\setbeamercolor{author in head/foot}{bg=chameleongreen3!85}
+\setbeamercolor{title in head/foot}{bg=chameleongreen1}
+\setbeamercolor{date in head/foot}{bg=chameleongreen4}
+
+\colorlet{markgreen}{chameleongreen3} %chameleongreen3!50!chameleongreen1}
+\colorlet{textgreen}{chameleongreen3!70!black}
+
+\setbeamercolor{enumerate item}{fg=textgreen}
+%\setbeamercolor{itemize item}{fg=textgreen}
+
+\setbeamertemplate{headline}
+{
+\hbox{%
+  \begin{beamercolorbox}[wd=.28\paperwidth,ht=2.7ex,dp=1.2ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\ (\insertshortinstitute)
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.44\paperwidth,ht=2.7ex,dp=1.2ex,center]{author in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle:\ \textbf{\insertsection}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.28\paperwidth,ht=2.7ex,dp=1.2ex,center]{author in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate
+  \end{beamercolorbox}}
+  \vskip0pt%
+}
+
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+
+\tikzset{
+  invisible/.style={opacity=0},
+  visible on/.style={alt={#1{}{invisible}}},
+  alt/.code args={<#1>#2#3}{%
+    \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+  },
+}
+
+\newcommand{\printSectionYes}{\AtBeginSubsection[]
+{
+ \begin{frame}{Agenda}
+ \tableofcontents[sectionstyle=show/shaded,
+ 					subsectionstyle=show/shaded/hide]
+ \end{frame}
+}}
+
+\tikzset{onslide/.code args={<#1>#2}{%
+  \only<#1>{\pgfkeysalso{#2}}%
+}}
