@@ -440,8 +440,8 @@ $s$ & $j$ &a&b&c&d&a&b&c&a&b&c&a&b&d\\
 \end{table}
 \end{frame}
 
-\begin{frame}{Präfixfunktion}
-\textbf{Beobachtung:} Finden wir ein \textit{Präfix $u$ des Musters $p$} im erfolgreich gescannten Teil $v$ von $p$ wieder, können wir dieses als \glqq Fallback\grqq-Position nutzen.\bigskip\bigskip
+\begin{frame}{Einführung}
+\textbf{Beobachtung:} Finden wir ein \textit{Präfix $u$ des Musters $p$} im erfolgreich gescannten Teil $v$ von $p$ wieder, können wir dieses als \glqq Fallback-Position\grqq nutzen.\bigskip\bigskip
 
 \begin{center}
 \resizebox {0.9\textwidth} {!} {
@@ -474,23 +474,26 @@ $s$ & $j$ &a&b&c&d&a&b&c&a&b&c&a&b&d\\
 \node at (12.55,0.35) {\LARGE $\lightning$};
 \node at (-2,0.35) {\LARGE $p$};
 \node (da) at (12.5,-0.35) {\Large $\uparrow$};
-\node[below of=da, node distance=1.5em] {\Large $j+1$};
+\node[below of=da, node distance=1.5em] {\Large $j$};
 
-\draw [line width=1pt,decorate,decoration={brace,amplitude=10pt,mirror}](0,0) -- (12,0) node[midway,yshift=-2.1em] {\Large $v=p[1]\cdots p[j]$};
+\draw [line width=1pt,decorate,decoration={brace,amplitude=10pt,mirror}](0,0) -- (12,0) node[midway,yshift=-4em] {\Large $\begin{aligned}v&=p\big[1\tdots (j-1)\big]\\&= t\big[(x+1)\tdots(x+j-1)\big]\end{aligned}$};
 
 \end{tikzpicture}}
-\end{center}%\pause
-%Wir suchen also den \emph{größtmöglichen Rand} $u$ von $v$ für alle $v$.
+\end{center}
+\end{frame}
+
+\begin{frame}{Einführung}
+
 \end{frame}
 
 \begin{frame}{Einführung}
 \begin{defi}
-Sei $v$ ein Wort über $\Sigma$. Wir nennen $u\in\Sigma^+$ \textit{Rand} von $v$, falls $w,x\in\Sigma^+$ ex.\ mit \[v=uw=xu\]
+Sei $x$ ein Wort über $\Sigma$. Wir nennen $u\in\Sigma^+$ \textit{Rand} von $x$, falls $v,w\in\Sigma^+$ ex.\ mit \[x=uv=wu\]
 \end{defi}
 \pause\bigskip
 Mit anderen Worten:\smallskip
 
-Ein Rand ist \emph{nichtleer} und sowohl \emph{echtes Präfix} als auch \emph{echtes Suffix} eines Wortes.
+Ein Rand ist ein \emph{nichtleeres}, sowohl \emph{echtes Präfix}, als auch \emph{echtes Suffix} eines Wortes.
 \end{frame}
 
 \begin{frame}{Einführung}
@@ -509,20 +512,22 @@ Sei $p=\texttt{0101010101}$. Wie lautet die Menge der Ränder von $p$?\pause
 \[\{\texttt{01},\texttt{0101},\texttt{010101},\texttt{01010101}\}\]
 \end{frame}
 
-\begin{frame}{KMP-Algorithmus}
+\begin{frame}{Präfixfunktion}
 \textbf{Idee:}\medskip
 
-Wir erstellen im Vorfeld eine \textbf{Tabelle} aus dem Muster, in der wir zur Laufzeit nur nachschlagen müssen.\medskip
+Wir suchen die Länge des \emph{größtmöglichen Randes} für alle Präfixe des Musters.
+
+Damit erstellen wir im Vorfeld eine \textit{Tabelle} aus dem Muster, in der wir zur Laufzeit nur nachschlagen müssen.\medskip
 
 Sie verrät uns, um wie viele Schritte das Muster bei einem Mismatch geschoben werden muss.
 \end{frame}
 
 \begin{frame}{KMP-Algorithmus}
-Der KMP-Algorithmus wird in \textit{zwei Phasen} aufgeteilt:\bigskip
+Der KMP-Algorithmus wird folglich in zwei Phasen aufgeteilt:\bigskip
 
 \begin{enumerate}[1.]
-\item \textbf{Vorlauf:} Analyse des Suchmusters und Erstellen der Nachschlagetabelle
-\item \textbf{Suche:} Suche im Text mithilfe der Tabelle
+\item \textit{Vorlauf:} Analyse des Suchmusters und Erstellen der Nachschlagetabelle
+\item \textit{Suche:} Suche im Text mithilfe der Tabelle
 \end{enumerate}
 \end{frame}
 
