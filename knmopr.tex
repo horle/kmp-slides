@@ -1,4 +1,4 @@
-\documentclass[xcolor=dvipsnames, aspectratio=1610]{beamer}
+\documentclass[xcolor=dvipsnames, aspectratio=169]{beamer}
 \usepackage[ngerman]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -253,7 +253,7 @@ Zur Komplexitätsmessung betrachten wir die \textbf{Anzahl der Vergleiche} von Z
 
 \begin{itemize}
 \item Im Pseudocode: Prüfung von \emph{gleichlangen} Strings in einer Zeile\bigskip
-\item Der zeichenweise Vergleich von zwei Strings $v,w$ bis zu einem Mismatch kostet \[\Theta\big(\vert u\vert +1\big)\] bei Mismatch an Stelle $\vert u\vert +1$, wenn gilt: $u$ ist Präfix von $v$ und  $u$ ist Präfix von $w$.
+\item Der zeichenweise Vergleich von zwei Strings $v,w$ bis zu einem Mismatch an der Stelle $\vert u\vert +1$ kostet \[\Theta\big(\vert u\vert +1\big)\] wenn gilt: $u$ ist Präfix von $v$ und  $u$ ist Präfix von $w$.
 \end{itemize}
 \end{frame}
 
@@ -285,17 +285,25 @@ mit $a=\texttt{0}$, $b=\texttt{1}$.
 \begin{frame}{Naiver Suchalgorithmus: Analyse}
 \textbf{Average Case:}\medskip
 
-\cite{baeza1989}: Mit $c=\vert\Sigma\vert$ und $n\geq m$ beträgt die erwartete Anzahl an Vergleichen $\bar{C}_n$:
-\[\bar{C}_n=\frac{c}{c-1}\left(1-\frac{1}{c^m}\right)(n-m+1)+\mathcal{O}(1)\]
+\cite{baeza1989}: Mit $c=\vert\Sigma\vert$, $c>1$ und $n\geq m$ beträgt die erwartete Anzahl an Vergleichen
+\[\bar{C}_n=\frac{c}{c-1}\left(1-\frac{1}{c^m}\right)(n-m+1)+\mathcal{O}(1)\]\medskip\pause
+
+Beispiel $c=2$:
+\begin{IEEEeqnarray*}{rCl}
+\bar{C}_n&=&2\left(1-\frac{1}{2^{m}}\right)(n-m+1)+\mathcal{O}(1)\\
+&=&\underbrace{\left(2-\frac{1}{2^{m-1}}\right)}_{\in\big[1,5\,;\,2\big[}(n-m+1)+\mathcal{O}(1)
+\end{IEEEeqnarray*}
 \end{frame}
 
 \begin{frame}[label=ani]{Naiver Suchalgorithmus: Auswertung}
-\begin{large}\textbf{Einige Fragen:}\end{large}\medskip\pause
+In der Praxis ist $n\gg m$. Der Average Case ist dann $\mathcal{O}(2n)$.\bigskip\pause
+
+\textbf{Einige Fragen:}\medskip\pause
 \begin{enumerate}[(1)]
-\item Was macht die Ineffizienz beim naiven Algorithmus aus? \smallskip\pause
+\item Was macht die Ineffizienz beim Worst Case aus? \smallskip\pause
 
 $\Rightarrow$ Überflüssige, wiederholte Vergleiche!\pause\smallskip
-\item Wie viele Vergleiche dürfen wir überspringen, ohne dabei ein Vorkommen zu verpassen?
+\item Wie viele Vergleiche dürfen wir überspringen, ohne dabei ein Vorkommen zu verpassen?\pause
 \item Wie können wir uns bei (2) \textit{sicher} sein?
 \end{enumerate}
 \end{frame}
@@ -763,6 +771,7 @@ $c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\
 \section{Fazit}
 
 \begin{frame}{Literatur}
+\nocite{*}
 \printbibliography
 \end{frame}
 

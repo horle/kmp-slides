@@ -2,7 +2,7 @@
 \newcommand{\orange}[1]{\textcolor{orange}{#1}}
 \newcommand{\green}[1]{\textcolor{markgreen}{#1}}
 \newcommand{\textgreen}[1]{\textcolor{textgreen}{#1}}
-\newcommand{\gray}[1]{\textcolor{lightgray}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
 
 \newcolumntype{R}{>{\centering\raggedleft\arraybackslash}X}
 \newcolumntype{L}{>{\centering\raggedright\arraybackslash}X}
@@ -82,6 +82,8 @@ title={\strut\textcolor{textgreen}{\textbf{#1}}}
 \setbeamercolor{enumerate item}{fg=textgreen}
 %\setbeamercolor{itemize item}{fg=textgreen}
 
+%\setbeamercovered{transparent=80}
+
 \setbeamertemplate{headline}
 {
 \hbox{%
@@ -118,3 +120,9 @@ title={\strut\textcolor{textgreen}{\textbf{#1}}}
 \tikzset{onslide/.code args={<#1>#2}{%
   \only<#1>{\pgfkeysalso{#2}}%
 }}
+
+\setbeamertemplate{section in toc shaded}[default][50]
+
+\makeatletter
+\patchcmd{\beamer@sectionintoc}{\vskip1.5em}{\vskip0.5em}{}{}
+\makeatother
