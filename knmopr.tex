@@ -199,18 +199,18 @@ FARBEN ÜBERARBEITEN
 \begin{frame}[label=naive]{Naiver Suchalgorithmus}
 \begin{mybox}{Naiver Suchalgorithmus \cites{cormenalgorithms2009}{berman2005algorithms}}
 \begin{algorithmic}[lines]
-\Require{Suchtext $t=a_1\cdots a_n$, Muster $p=b_1\cdots b_m$}
-\Ensure{Liste gültiger Shifts $s$ von $p$ in $t$}\\\\
+\Require{Suchtext $t$ mit $\vert t\vert=n$, Muster $p$ mit $\vert p\vert=m$}
+\Ensure{Menge gültiger Shifts vshifts von $p$ in $t$}\\\\
 
 \centering
 \parbox[l]{8cm}{
 \For{$s=0$ \textcolor{textgreen}{\textbf{to}} $n-m$}
 	\If {$t\big[(s+1)\tdots (s+m)\big] ==\: p[1 \tdots m]$}
-		\State \textgreen{\textbf{add}} $s$ \textgreen{\textbf{to}} results
+		\State \textgreen{\textbf{add}} $s$ \textgreen{\textbf{to}} vshifts
 	\EndIf
 \EndFor
 
-\Return{results}
+\Return{vshifts}
 }
 \end{algorithmic}
 \end{mybox}
@@ -258,19 +258,19 @@ Zur Komplexitätsmessung betrachten wir die \textbf{Anzahl der Vergleiche} von Z
 \end{frame}
 
 \begin{frame}{Naiver Suchalgorithmus: Analyse}
-Der naive Algorithmus hat eine Laufzeit von \[V=\underbrace{(n-m+1)}_{\text{Schleife außen}}\cdot \underbrace{m}_{\text{innen}}\in\mathcal{O}(nm)\]\medskip\pause
+Der naive Algorithmus hat eine Laufzeit von \[\underbrace{(n-m+1)}_{\text{Schleife außen}}\cdot \underbrace{m}_{\text{innen}}\in\mathcal{O}(nm)\]\medskip\pause
 
 \textbf{Best Case:}\medskip
 
 Jeder Versuch wird bereits beim ersten Zeichen abgebrochen:
-\[V=n-m+1\in\Theta(n)\]
+\[n-m+1\in\Theta(n)\]
 \end{frame}
 
 \begin{frame}{Naiver Suchalgorithmus: Analyse}
 \textbf{Worst Case:}\medskip
 
-Das Muster wird immer bis zum Ende gescannt und dann abgebrochen. Dann gilt:
-\[V=(n-m+1)\cdot m\in\Theta(nm)\]\smallskip\pause
+Das Muster wird immer bis zum Ende gescannt und dann abgebrochen. Dann:
+\[(n-m+1)\cdot m\in\Theta(nm)\]\smallskip\pause
 
 \textit{Klassisches Beispiel:}\smallskip
 
@@ -282,26 +282,21 @@ p&=&\texttt{001}
 mit $a=\texttt{0}$, $b=\texttt{1}$.
 \end{frame}
 
-\begin{frame}<1-5>[label=ani]
-\frametitle<1-5>{Naiver Suchalgorithmus: Auswertung}
-\frametitle<6->{KMP-Algorithmus}
+\begin{frame}{Naiver Suchalgorithmus: Analyse}
+\textbf{Average Case:}\medskip
+
+\cite{baeza1989}: Mit $c=\vert\Sigma\vert$ und $n\geq m$ beträgt die erwartete Anzahl an Vergleichen $\bar{C}_n$:
+\[\bar{C}_n=\frac{c}{c-1}\left(1-\frac{1}{c^m}\right)(n-m+1)+\mathcal{O}(1)\]
+\end{frame}
+
+\begin{frame}[label=ani]{Naiver Suchalgorithmus: Auswertung}
 \begin{large}\textbf{Einige Fragen:}\end{large}\medskip\pause
 \begin{enumerate}[(1)]
 \item Was macht die Ineffizienz beim naiven Algorithmus aus? \smallskip\pause
 
-$\Rightarrow$ Überflüssige Vergleiche!\pause\smallskip
-\item Welche Vergleiche sind überflüssig?
-
-\smallskip\pause
-
-$\Rightarrow$ Mehrfache Vergleiche, aber wie findet man die heraus?\pause
-
-\begin{enumerate}[(a)]
-\item Bereits gescannte Zeichen, die kein Präfix des Musters sind\pause
-\item Ein erkanntes Präfix, das in der inneren Schleife übersprungen werden kann\pause
-\end{enumerate}
-
-\item Woher wissen wir \textbf{sicher} für jede Position im Muster, wie viele Zeichen wir überspringen dürfen?
+$\Rightarrow$ Überflüssige, wiederholte Vergleiche!\pause\smallskip
+\item Wie viele Vergleiche dürfen wir überspringen, ohne dabei ein Vorkommen zu verpassen?
+\item Wie können wir uns bei (2) \textit{sicher} sein?
 \end{enumerate}
 \end{frame}
 
@@ -656,8 +651,6 @@ Die Präfixfunktion kann man auch als Übergangsfunktion für einen \emph{endlic
 \item $\pi(j)$ ist der Folgezustand bei einem Mismatch in Zustand $j+1$
 \item restliche Übergänge: \glqq Rückgrat\grqq
 \end{itemize}
-
-
 \end{frame}
 
 \begin{frame}{Endlicher Automat}
@@ -731,6 +724,31 @@ $c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\
 \end{tabularx}
 \end{minipage}
 \end{small}
+\end{frame}
+
+\begin{frame}{Präfixfunktion}
+\begin{mybox}{Berechnung der Präfixfunktion \cites{cormenalgorithms2009}}
+\begin{algorithmic}[lines]
+\Require{Muster $p$ mit $\vert p\vert=m$}
+\Ensure{Funktion $\pi$ für $p$}\\\\
+
+\centering
+\parbox[l]{8cm}{
+\State $\pi(1) = 0$, $k=0$
+\For{$j=2$ \textcolor{textgreen}{\textbf{to}} $m$}
+	\While{$k>0$ \textcolor{textgreen}{\textbf{and}} $p[k+1]\neq p[j]$}
+		\State $k=\pi(k)$
+	\EndWhile
+	\If {$p[k+1] ==\: p[j]$}
+		\State $k=k+1$
+	\EndIf
+	\State $\pi(j)=k$
+\EndFor
+
+\Return{$\pi$}
+}
+\end{algorithmic}
+\end{mybox}
 \end{frame}
 
 \subsection{Suchphase}
