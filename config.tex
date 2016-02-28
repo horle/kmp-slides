@@ -75,6 +75,14 @@ title={\strut\textcolor{textblue}{\textbf{#1}}}
 }
 {\end{mybluebox}}
 
+\newcounter{lemma}
+\resetcounteronoverlays{lemma}
+\newcommand{\lema}{\refstepcounter{lemma}\thelemma}
+\newenvironment{lemm}{
+	\begin{mybluebox}{Lemma \lema}
+}
+{\end{mybluebox}}
+
 \author[Felix Kußmaul]{\Large Felix Kußmaul}
 \title[Der KMP-Algorithmus]{\LARGE Der Knuth-Morris-Pratt-Algorithmus}
 \subtitle{Einführung und Analyse}

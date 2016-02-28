@@ -96,6 +96,12 @@ Für eine gegebene Funktion $g(n)$ definieren wir die Mengen
 \onslide<4>{\textit{Ohne Beweis:} Für zwei Funktionen $f(n),\,g(n)$ gilt $f(n)\in\Theta\big(g(n)\big)$ genau dann, wenn $f(n)\in\mathcal{O}\big(g(n)\big)$ und $f(n)\in\Omega\big(g(n)\big)$.\qed}
 \end{frame}
 
+\begin{frame}{Grundbegriffe Komplexität}
+\begin{defi}
+Die (gewöhnliche) \emph{erzeugende Funktion} (OGF) einer Folge $a_0,a_1,\dots,a_k,\dots$ ist def.\ als \[A(z)=\sum_{k\geq 0}a_kz^k\] Wir schreiben $[z^k]A(z)$ für den Koeffizienten $a_k$.
+\end{defi}
+\end{frame}
+
 \begin{frame}[<+->]{Konventionen}
 Sei $\Sigma$ ein Alphabet. Wir schreiben\bigskip
 
@@ -103,9 +109,9 @@ Sei $\Sigma$ ein Alphabet. Wir schreiben\bigskip
 \item $\Sigma^+$ für $\Sigma^*\setminus \{\varepsilon\}$, also die Menge aller \textit{nichtleeren} Wörter über $\Sigma$
 \item Kleinbuchstaben vom Alphabetanfang ($a,b,c,\dots$) für Zeichen in $\Sigma$
 \item Kleinbuchstaben vom Alphabetende ($u, v, w,\dots$) für Wörter über $\Sigma$
+\item $p$ für das Suchmuster, $t$ für den Text
 \item $v\circ w$ kurz als $vw$
 \item $u[1] u[2] \cdots u[n]$ kurz als $u[1 \tdots n]$\hfill ($n\geq 0$)
-%\item Beschränkung auf Binärstrings, also $\Sigma = \{0,1\}$
 
 \end{itemize}
 \end{frame}
@@ -292,7 +298,7 @@ Beispiel $c=2$:
 \end{frame}
 
 \begin{frame}[label=ani]{Naiver Suchalgorithmus: Auswertung}
-In der Praxis ist $n\gg m$. Der Average Case ist damit akzeptabel.\bigskip\pause
+In der Praxis ist $n\gg m$. Der Average Case ist damit $\sim 2n$ \cite{sedgewick2013}.\bigskip\pause
 
 \textbf{Einige Fragen:}\medskip\pause
 \begin{enumerate}[(1)]
@@ -854,13 +860,60 @@ Also ist die gesamte Dekrementierung von $k$ in der While-Schleife nach oben bes
 
 \againframe{kmpsearch}
 
-\begin{frame}{KMP-Suchlauf: Analyse}
+\begin{frame}{KMP-Suchlauf: Amortisierte Analyse}
 \begin{theo}
 Seien $n=\vert t\vert$ und $m=\vert p\vert$ für einen Text $t$ und ein Muster $p$. Die Laufzeit des KMP-Suchalgorithmus beträgt $\Theta(n)$.
 \end{theo}
 \begin{proof}
 Analog zu Satz 1: $j$ wird in der While-Schleife dekrementiert, aber es gilt stets $j\geq 0$. Also kann $j$ höchstens mit jedem Inkrement in Z.\ 6 dekrementiert werden. Die betreffende For-Schleife wird höchstens $n-1$ mal ausgeführt, und so auch die While-Schleife. Also ist die Laufzeit $\Theta(n)$.
 \end{proof}
+\end{frame}
+
+\begin{frame}{KMP-Suchlauf: Average Case Analyse}
+\textbf{Beobachtung:}\medskip
+
+Für jedes Zeichen $a$ im Text hängt die Anzahl der Vergleiche mit dem Muster $p$ höchstens von den $\vert p'\vert$ letzten Zeichen im Text ab.
+\end{frame}
+
+\begin{frame}{KMP-Suchlauf: Average Case Analyse}
+\begin{lemm}
+Für jedes $a=t[i]$ mit $i=1,\dots,n$ gilt: Sei $p'$ das größtmögliche echte Präfix von $p$, auf das $a$ im Text folgt, also:
+\[t\big[(s+1)\tdots(s+k+1)\big]=p'a\]
+für ein $s\geq 0$, wobei $k=\vert p'\vert$ und $0\leq k\leq \vert p\vert$. Dann ist der erste Vergleich von $a$ mit einem Zeichen in $p$ an der Stelle $k+1$.
+\end{lemm}
+\begin{proof}
+Tafel.
+\end{proof}
+\end{frame}
+
+\begin{frame}{KMP-Suchlauf: Average Case Analyse}
+\textit{Ziel:} Zählen der möglichen Wörter $p'$ mit je $\vert p'\vert$ Vergleichen, und OGF ableiten.\bigskip
+
+\begin{defi}
+Sei $s$ ein Parameter für alle $w\in S$ mit $S\subseteq\Sigma^*$. Die erzeugende Funktion $\Phi_S$ für die Menge $S$ ist def.\ als \[\Phi_S(z)=\sum_{k}s_kz^k\]
+wobei $s_k$ der \emph{Durchschnittswert} von $s$ für $w$ ist mit $\vert w\vert=k$.
+\end{defi}
+\end{frame}
+
+\begin{frame}{KMP-Suchlauf: Average Case Analyse}
+Einige Regeln für Strings:\medskip
+
+Seien $\Phi_A(z), \Phi_B(z)$ die OGFs für die Mengen $A,B\subseteq\Sigma^*$ mit $A\neq B$ und seien $u\in A$, $v\in B$.
+\begin{enumerate}[(a)]
+\item \emph{Additivität:} Wenn $A\cap B=\emptyset$, dann ist $\Phi_A(z)+ \Phi_B(z)$ Die OFG für $A\cup B$.
+\item \emph{Konkatenation:} Ist die Zerlegung von $x=uv$ eindeutig, dann gilt \[\Phi_{AB}(z)=\Phi_A(z)\cdot \Phi_B(z)\]
+\item \emph{Wiederholung:} Z.\,B.\ für zwei Wörter $x=vv$, $y=vuv$: \[\Phi_{B}(z^2)\text{ und }\Phi_B(z^2)\cdot\Phi_A(z)\]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{OGF String Beispiel}
+Sei $\Sigma$ ein Alphabet mit $\vert\Sigma\vert=q$. Die OGF, die $\Sigma^*$ durchzählt, ist \[\Phi_\Sigma(z)=\frac{1}{1-qz}\]
+\end{frame}
+
+\begin{frame}{KMP-Suchlauf: Average Case Analyse}
+\begin{theo}
+Sei $C_n(p)$ die durchschnittliche Anzahl von Vergleichen im KMP-Algorithmus für einen Text der Länge $n$ und ein Muster $p$. Sei $\bar{C}_n$ der Durchschnittswert von $C_n(p)$ für alle $p$. Dann gilt:
+\end{theo}
 \end{frame}
 
 \begin{frame}{Exkurs: Fibonacci-Strings}
