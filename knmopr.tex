@@ -150,18 +150,21 @@ Das \emph{String-Matching-Problem} ist das Problem, alle gültigen Shifts zu fin
 \end{itemize}
 \item<8> Halt, falls \texttt{EOF} erkannt.
 \end{enumerate}
-FARBEN ÜBERARBEITEN
 \begin{center}
 \begin{tikzpicture}[thick, scale=0.9, anchor=base ]
 \node (st) at (-.5,-0.5) {\small Suchtext};
 \node[visible on=<2->](sm) at (-.5,-1.7) {\small Suchmaske};
 
 \foreach \x/\y/\z in {1/0/3,2/1/0,3/1/5,4/0/0,5/0/0,6/1/0,7/0/0} {
-	\draw[fill=chameleongreen2!40] (\x,-.85) rectangle (\x+1,0.15);
+	\draw (\x,-.85) rectangle (\x+1,0.15);
 	\ifthenelse{1=\x \OR \x=3}{
     	\node[onslide=<\z>{text=red}] at (\x+.5,-0.5) {\Large $\texttt{\y}$};
     }{\node at (\x+.5,-0.5) {\Large $\texttt{\y}$};}
 }
+
+\draw<4-5>[|->] (1,-1.55) -- (2,-1.55);
+\draw<6-8>[|->] (1,-1.55) -- (3,-1.55);
+%\draw<4>[|->] (1,-1.55) -- (8,-1.55);
 
 \draw<2-3>[color= chameleongreen4] (0.95,-.9) rectangle (4.05,.2);
 \node(p1)[visible on=<2>]  at (2.5,0.40) {\footnotesize\textcolor{chameleongreen4}{Fenster}};
@@ -176,15 +179,15 @@ FARBEN ÜBERARBEITEN
 \draw[visible on=<1>, color=white] (1,-2.05) rectangle (2,-1.2);
 
 \foreach \x/\y/\z in {2/1/3,3/0/5,4/0/0} {
-	\draw<2-3>(\x-1,-2.05) rectangle (\x,-1.05);
+	\draw<2-3>[fill=chameleongreen2!30](\x-1,-2.05) rectangle (\x,-1.05);
 	\ifthenelse{\x=2}{
 		\node<2-3>[onslide=<\z>{text=red}] at (\x-.5,-1.7) {\Large $\texttt{\y}$};
 	}{\node<2-3> at (\x-.5,-1.7) {\Large \texttt{\y}};}
-    \draw<4-5> (\x,-2.05) rectangle (\x+1,-1.05);
+    \draw<4-5>[fill=chameleongreen2!30] (\x,-2.05) rectangle (\x+1,-1.05);
     \ifthenelse{\x=3}{
 		\node<4-5>[onslide=<\z>{text=red}] at (\x+.5,-1.7) {\Large $\texttt{\y}$};
 	}{\node<4-5> at (\x+.5,-1.7) {\Large \texttt{\y}};}
-    \draw<6-8> (\x+1,-2.05) rectangle (\x+2,-1.05);
+    \draw<6-8>[fill=chameleongreen2!30] (\x+1,-2.05) rectangle (\x+2,-1.05);
     \node<6-8> at (\x+1.5,-1.7) {\Large \texttt{\y}};
 }
 
@@ -193,7 +196,7 @@ FARBEN ÜBERARBEITEN
 \node<7-8> at (4.5,-1.7) {\textcolor{markgreen}{\Large \texttt{0}}};
 \node<8> at (5.5,-1.7) {\textcolor{markgreen}{\Large \texttt{0}}};
 
-\node[visible on=<8>, right of=p3]  {\textcolor{markgreen}{\quad\Large $\checkmark$\normalsize $~s=2$}};
+\node[visible on=<8>] at (p3) {\textcolor{markgreen}{\quad\Large $\checkmark$\normalsize $~s=2$}};
 \end{tikzpicture}
 \end{center}
 \end{frame}
@@ -260,7 +263,7 @@ Zur Komplexitätsmessung betrachten wir die \textbf{Anzahl der Vergleiche} von Z
 \end{frame}
 
 \begin{frame}{Naiver Suchalgorithmus: Analyse}
-Der naive Algorithmus hat eine Laufzeit von \[\underbrace{(n-m+1)}_{\text{Schleife außen}}\cdot \underbrace{m}_{\text{innen}}\in\mathcal{O}(nm)\]\medskip\pause
+Der naive Algorithmus hat eine Laufzeit von \[\underbrace{(n-m+1)}_{\text{Schleife außen}}\cdot \underbrace{m}_{\text{innen}}\]\medskip\pause
 
 \textbf{Best Case:}\medskip
 
@@ -272,7 +275,7 @@ Jeder Versuch wird bereits beim ersten Zeichen abgebrochen:
 \textbf{Worst Case:}\medskip
 
 Das Muster wird immer bis zum Ende gescannt und dann abgebrochen. Dann:
-\[(n-m+1)\cdot m\in\Theta(nm)\]\smallskip\pause
+\[(n-m+1)\cdot m\in\Theta\big((n-m+1)m\big)\]\smallskip\pause
 
 \textit{Klassisches Beispiel:}\smallskip
 
@@ -586,7 +589,6 @@ Die Präfixfunktion kann man auch für die Übergangsfunktion eines \emph{endlic
 
 \begin{frame}{Präfixfunktion}
 \begin{small}
-ERST ANALYSE, DANN DAS HIER SCHNELL ZU ENDE
 \begin{defi}
 Sei $f\colon\mathbb{D}\to\mathbb{Z}$ eine Funktion und seien $d\in\mathbb{D},\,i\geq 1$. Wir definieren induktiv:
 \begin{IEEEeqnarray*}{rCl}
@@ -711,7 +713,9 @@ $c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\
 \begin{tikzpicture}[visible on=<1-4>,thick, scale=1, anchor=base ]
 
 \foreach \x/\y in {1/a,2/b,3/c,4/d,5/a,6/b,7/c,8/a,9/b,10/c,11/a,12/b,13/d} {
-	\draw[fill=chameleongreen2!50] (\x,-.85) rectangle (\x+1,0.15);
+	
+
+	\draw (\x,-.85) rectangle (\x+1,0.15);
     \node at (\x+.5,-0.5) {\Large \texttt{\y}};
     \node at (\x+.5,0.3) {\tiny \texttt{\x}};
 }
@@ -725,9 +729,9 @@ $c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\
 \draw<3>[|->] (1,-1.55) -- (5,-1.55);
 \draw<4>[|->] (1,-1.55) -- (8,-1.55);
 
-\node at (0.3,-2.4) {\tiny $j$};
-\node<1-4> at (0.3,-0.5) {\small $t$};
-\node<1-4> at (0.3,-1.7) {\small $p$};
+\node at (0.3,-2.4) {\footnotesize $j$};
+\node<1-4> at (0.3,-0.5) { $t$};
+\node<1-4> at (0.3,-1.7) { $p$};
 
 \draw<1>[color= chameleongreen4] (0.95,-.9) rectangle (7.05,.2);
 \draw<2>[color= chameleongreen4] (3.95,-.9) rectangle (10.05,.2);
@@ -741,25 +745,21 @@ $c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\
 %\draw[visible on=<1-5>, color=white] (1,-2.05) rectangle (2,-1.2);
 
 \foreach \x/\y in {1/a,2/b,3/c,4/a,5/b,6/d} {
-	\draw<1> 	(\x,-2.05) rectangle (\x+1,-1.05);
+	\draw<1>[fill=chameleongreen2!30] 	(\x,-2.05) rectangle (\x+1,-1.05);
     \node<1> at (\x+.5,-1.7) {\Large \texttt{\y}};
     \node<1> at (\x+.5,-2.4) {\tiny \texttt{\x}};
-    \draw<2> 	(\x+3,-2.05) rectangle (\x+4,-1.05);
+    \draw<2>[fill=chameleongreen2!30] 	(\x+3,-2.05) rectangle (\x+4,-1.05);
     \node<2> at (\x+3.5,-1.7) {\Large \texttt{\y}};
     \node<2> at (\x+3.5,-2.4) {\tiny \texttt{\x}};
-    \draw<3> 	(\x+4,-2.05) rectangle (\x+5,-1.05);
+    \draw<3>[fill=chameleongreen2!30] 	(\x+4,-2.05) rectangle (\x+5,-1.05);
     \node<3> at (\x+4.5,-1.7) {\Large \texttt{\y}};
     \node<3> at (\x+4.5,-2.4) {\tiny \texttt{\x}};
-    \draw<4> 	(\x+7,-2.05) rectangle (\x+8,-1.05);
+    \draw<4>[fill=chameleongreen2!30] 	(\x+7,-2.05) rectangle (\x+8,-1.05);
     \node<4>at (\x+7.5,-1.7) {\Large \texttt{\y}};
     \node<4>at (\x+7.5,-2.4) {\tiny \texttt{\x}};
 }
 
 %coloured s and j's
-%\node<1> at (1.5,0.3) {\tiny \textcolor{orange}{\texttt{1}}};
-%\node<2> at (4.5,0.3) {\tiny \textcolor{orange}{\texttt{4}}};
-%\node<3> at (5.5,0.3) {\tiny \textcolor{orange}{\texttt{5}}};
-%\node<4> at (8.5,0.3) {\tiny \textcolor{orange}{\texttt{8}}};
 \node<1> at (4.5,-2.4) {\tiny \textcolor{orange}{\texttt{4}}};
 \node<2> at (4.5,-2.4) {\tiny \textcolor{orange}{\texttt{1}}};
 \node<3> at (10.5,-2.4) {\tiny \textcolor{orange}{\texttt{6}}};
@@ -821,6 +821,7 @@ $s$ & $j$ &a&b&c&d&a&b&c&a&b&c&a&b&d\\
 \begin{enumerate}[(i)]
 \item Aggregation nach \cite{cormenalgorithms2009}
 \item Delay nach \cite{KnuthMorrisPratt1977}
+\item Average und Worst Case nach \cite{baeza1989}
 \end{enumerate}
 \end{enumerate}
 \end{frame}
@@ -845,10 +846,10 @@ Sei $m=\vert p\vert$ für ein Muster $p$. Die Laufzeit des Algorithmus zur Berec
 %Die \texttt{while}-Schleife in Zeile 3 ist der einzige schwierig abzuschätzende Teil. 
 Wir betrachten $k$: 
 \begin{enumerate}[(1)]
-\item Nach der Initialisierung mit $0$ kann $k$ nur durch das Inkrement in Z.\ 6 erhöht werden, das pro Iteration der For-Schleife \emph{höchstens ein Mal} ausgeführt wird. Damit wird $k$ insgesamt \emph{höchstens $m-1$ mal} inkrementiert (wegen $j=2,\dots,m$).
-\item Mit jeder Iteration der For-Schleife wird $j$ inkrementiert, und vorher gilt $k<j$. Da $k$ wegen (1) nicht stärker wächst als $j$, gilt stets $k<j$ und damit $\pi(j)<j$ für $j=1,2,\dots,m$, wegen Z.\ 1\&7. D.\,h., jede Iteration der While-Schleife setzt $k$ herab.
+\item Nach der Initialisierung mit $0$ kann $k$ nur durch das Inkrement in Z.\ 6 erhöht werden, das pro Iteration der For-Schleife \emph{höchstens ein Mal} ausgeführt wird. Damit wird $k$ insgesamt \emph{höchstens $m-1$ mal} inkrementiert (wegen $j=2,\dots,m$).\pause
+\item Mit jeder Iteration der For-Schleife wird $j$ inkrementiert, und vorher gilt $k<j$. Da $k$ wegen (1) nicht stärker wächst als $j$, gilt stets $k<j$ und damit $\pi(j)<j$ für $j=1,2,\dots,m$, wegen Z.\ 1\&7. D.\,h., jede Iteration der While-Schleife setzt $k$ herab.\pause
 \item Es gilt stets $k\geq 0$, wegen Z.\ 1 und der ersten Bedingung der While-Schleife.
-\end{enumerate}
+\end{enumerate}\pause
 Also ist die gesamte Dekrementierung von $k$ in der While-Schleife nach oben beschränkt, und zwar durch die $(m-1)$-malige Inkrementierung von $k$ in der For-Schleife. Die While-Schleife iteriert daher insgesamt höchstens $m-1$ mal, und wir haben eine Laufzeit von $\Theta(m)$.\qed
 \end{small}
 \end{frame}
@@ -861,10 +862,13 @@ Also ist die gesamte Dekrementierung von $k$ in der While-Schleife nach oben bes
 \begin{theo}
 Seien $n=\vert t\vert$ und $m=\vert p\vert$ für einen Text $t$ und ein Muster $p$. Die Laufzeit des KMP-Suchalgorithmus beträgt $\Theta(n)$.
 \end{theo}
+\begin{small}
 \begin{proof}
 Analog zu Satz 1: $j$ wird in der While-Schleife dekrementiert, aber es gilt stets $j\geq 0$. Also kann $j$ höchstens mit jedem Inkrement in Z.\ 6 dekrementiert werden. Die betreffende For-Schleife wird höchstens $n-1$ mal ausgeführt, und so auch die While-Schleife. Also ist die Laufzeit $\Theta(n)$.
-\end{proof}
+\end{proof}\pause
+
 Die Gesamtlaufzeit (Erstellen der Präfixfunktion und Suchlauf) beträgt damit $\Theta(m+n)$.
+\end{small}
 \end{frame}
 
 \begin{frame}{KMP-Suchlauf: Delay Analyse}
@@ -884,9 +888,9 @@ Sei $u=a_1\cdots a_n$ ein Wort über $\Sigma$ mit $n\geq 0$. Wir nennen $\mathfr
 
 \textbf{Beispiel:} Sei $w = aabaaba$. Dann sind $\mathfrak{p}_1,\mathfrak{p}_2,\mathfrak{p}_3$ Perioden von $w$:
 \begin{IEEEeqnarray*}{rClCl}
-\ell_1&=&\vert aab\vert&=&3,\\
-\ell_2&=&\vert aabaab\vert&=&6,\\
-\ell_3&=&\vert aabaaba\vert&=&7
+\mathfrak{p}_1&=&\vert aab\vert&=&3,\\
+\mathfrak{p}_2&=&\vert aabaab\vert&=&6,\\
+\mathfrak{p}_3&=&\vert aabaaba\vert&=&7
 \end{IEEEeqnarray*}
 \end{frame}
 
@@ -996,10 +1000,33 @@ Induktionsschluss.
 Es ist bekannt, dass $F_d\geq \frac{\phi^d}{\sqrt{5}}$. Wir erhalten $\vert w\vert\geq\phi^d-2$, und schließlich $m+1\geq\phi^d$ bzw.\ $d\leq\log_\phi(m+1)$.\qed 
 \end{frame}
 
+\begin{frame}{KMP-Suchlauf: Average Case}
+Nach \cite{baeza1989} ist die geschätzte Anzahl an Vergleichen nach oben beschränkt durch
+\[\frac{\bar{C}_n}{n}\leq 2-\frac{1}{c}+\mathcal{O}\left(\frac{1}{n}\right)<2\]
+für $\vert\Sigma\vert=c\leq \log_\phi(m)$\pause\ und durch
+\[\frac{\bar{C}_n}{n}\leq 1+\frac{1}{c}+\frac{\log_\phi(m)-1}{c^3}+\mathcal{O}\left(\frac{\log^2(m)}{c^4}\right)\]
+für $c > \log_\phi(m)$ mit $\phi=\frac{1+\sqrt{5}}{2}\approx 1,618\dots$.
+\end{frame}
+
+\begin{frame}{Analyse: Zusammenfassung}
+\begin{table}%\setlength\extrarowheight{.3em}
+\begin{tabularx}{\textwidth}{lccC}
+\toprule
+Algorithmus&Worst Case &Best Case&Average Case\\
+\midrule
+Naiv						&$\Theta\big((m-n+1)m\big)$	&$\Theta(n)$	&$\sim 2n$\\[1em]
+KMP\footcite{baeza1989}		&$2n+m$			&$\Theta(n+m)$			&$\bar{C}_n+m$ (s.\,o.)\\\bottomrule
+\end{tabularx}
+\caption{Laufzeiten}
+\end{table}
+\bigskip
+
+wobei $\vert t\vert=n$, $\vert p\vert=m$, $c=\vert\Sigma\vert$.
+\end{frame}
 
 \section{Fazit}
 
-\begin{frame}{Literatur}
+\begin{frame}[allowframebreaks]{Literatur}
 \nocite{*}
 \begin{small}
 \printbibliography
