@@ -32,6 +32,11 @@
 	\titlepage
 }
 
+\begin{frame}
+Diesen Foliensatz findet ihr auch unter:
+\[\text{\huge\texttt{www.sineband.de/\textasciitilde felix/kmp.pdf}}\]
+\end{frame}
+
 \begin{frame}{Agenda}
        \tableofcontents[ 
   		currentsubsection, 
@@ -107,15 +112,6 @@ Sei $\Sigma$ ein Alphabet. Wir schreiben\bigskip
 
 \section{Motivation}
 \subsection{Das String-Matching-Problem}
-%\begin{frame}{Das String-Matching-Problem}
-%\begin{mybox}{String-Matching-Problem}
-%Seien $p,w\in\Sigma^+$ Wörter mit $\vert p\vert \leq \vert w\vert$. Existieren zwei Wörter $u,v$, sodass \[w=upv\quad \text{?}\]\pause
-%Mit anderen Worten: Ist $p$ ein Teilwort von $w$?
-%\end{mybox}\bigskip
-%
-%Konkret suchen wir nach der Position $\vert u\vert +1$ von $p$ in $w$.
-%\end{frame}
-
 \begin{frame}[<+->]{Das String-Matching-Problem}
 \begin{defi}
 Seien $p,t\in\Sigma^+$ Wörter mit $\vert p\vert \leq \vert t\vert$ und sei $s\in\mathbb{N}$.\medskip
@@ -291,12 +287,12 @@ mit $a=\texttt{0}$, $b=\texttt{1}$.
 Beispiel $c=2$:
 \begin{IEEEeqnarray*}{rCl}
 \bar{C}_n&=&2\left(1-\frac{1}{2^{m}}\right)(n-m+1)+\mathcal{O}(1)\\
-&=&\underbrace{\left(2-\frac{1}{2^{m-1}}\right)}_{\in\big[1,5\,;\,2\big[}(n-m+1)+\mathcal{O}(1)
+&=&\underbrace{\left(2-\frac{1}{2^{m-1}}\right)}_{\in\big[1\,;\,2\big[}(n-m+1)+\mathcal{O}(1)
 \end{IEEEeqnarray*}
 \end{frame}
 
 \begin{frame}[label=ani]{Naiver Suchalgorithmus: Auswertung}
-In der Praxis ist $n\gg m$. Der Average Case ist dann $\mathcal{O}(2n)$.\bigskip\pause
+In der Praxis ist $n\gg m$. Der Average Case ist damit akzeptabel.\bigskip\pause
 
 \textbf{Einige Fragen:}\medskip\pause
 \begin{enumerate}[(1)]
@@ -336,110 +332,6 @@ $\Rightarrow$ Überflüssige, wiederholte Vergleiche!\pause\smallskip
 \end{frame}
 
 \subsection{Einführung}
-
-\begin{frame}{Einführungsbeispiel}
-\begin{center}\vspace*{-1em}
-\begin{tikzpicture}[visible on=<1-4>,thick, scale=1, anchor=base ]
-
-\foreach \x/\y in {1/a,2/b,3/c,4/d,5/a,6/b,7/c,8/a,9/b,10/c,11/a,12/b,13/d} {
-	\draw[fill=chameleongreen2!50] (\x,-.85) rectangle (\x+1,0.15);
-    \node at (\x+.5,-0.5) {\Large \texttt{\y}};
-    \node at (\x+.5,0.3) {\tiny \texttt{\x}};
-}
-
-%\node<1> at (1,-3.3) {$s=0$};
-\node<2> at (2.5,-2) {$s=3$};
-\node<3> at (3,-2) {$s=4$};
-\node<4> at (4.5,-2) {$s=7$};
-
-\draw<2>[|->] (1,-1.55) -- (4,-1.55);
-\draw<3>[|->] (1,-1.55) -- (5,-1.55);
-\draw<4>[|->] (1,-1.55) -- (8,-1.55);
-
-\node at (0.3,-2.4) {\tiny $j$};
-\node<1-4> at (0.3,-0.5) {\small $t$};
-\node<1-4> at (0.3,-1.7) {\small $p$};
-
-\draw<1>[color= chameleongreen4] (0.95,-.9) rectangle (7.05,.2);
-\draw<2>[color= chameleongreen4] (3.95,-.9) rectangle (10.05,.2);
-\draw<3>[color= chameleongreen4] (4.95,-.9) rectangle (11.05,.2);
-\draw<4>[color= chameleongreen4](7.95,-.9) rectangle (14.05,.2);
-
-\node<-3> at 	(10.32,-2.9) {\textcolor{white}{ \rotatebox[origin=c]{270}{\Huge $\Lsh$}}};
-%anti-slip
-%\draw<2-4>[color=white] (0.95,0) -- (0.95,-0.05);
-%\draw[color=white] (14.95,0) -- (14.95,-0.05);
-%\draw[visible on=<1-5>, color=white] (1,-2.05) rectangle (2,-1.2);
-
-\foreach \x/\y in {1/a,2/b,3/c,4/a,5/b,6/d} {
-	\draw<1> 	(\x,-2.05) rectangle (\x+1,-1.05);
-    \node<1> at (\x+.5,-1.7) {\Large \texttt{\y}};
-    \node<1> at (\x+.5,-2.4) {\tiny \texttt{\x}};
-    \draw<2> 	(\x+3,-2.05) rectangle (\x+4,-1.05);
-    \node<2> at (\x+3.5,-1.7) {\Large \texttt{\y}};
-    \node<2> at (\x+3.5,-2.4) {\tiny \texttt{\x}};
-    \draw<3> 	(\x+4,-2.05) rectangle (\x+5,-1.05);
-    \node<3> at (\x+4.5,-1.7) {\Large \texttt{\y}};
-    \node<3> at (\x+4.5,-2.4) {\tiny \texttt{\x}};
-    \draw<4> 	(\x+7,-2.05) rectangle (\x+8,-1.05);
-    \node<4>at (\x+7.5,-1.7) {\Large \texttt{\y}};
-    \node<4>at (\x+7.5,-2.4) {\tiny \texttt{\x}};
-}
-
-%coloured s and j's
-%\node<1> at (1.5,0.3) {\tiny \textcolor{orange}{\texttt{1}}};
-%\node<2> at (4.5,0.3) {\tiny \textcolor{orange}{\texttt{4}}};
-%\node<3> at (5.5,0.3) {\tiny \textcolor{orange}{\texttt{5}}};
-%\node<4> at (8.5,0.3) {\tiny \textcolor{orange}{\texttt{8}}};
-\node<1> at (4.5,-2.4) {\tiny \textcolor{orange}{\texttt{4}}};
-\node<2> at (4.5,-2.4) {\tiny \textcolor{orange}{\texttt{1}}};
-\node<3> at (10.5,-2.4) {\tiny \textcolor{orange}{\texttt{6}}};
-\node<4> at (13.5,-2.4) {\tiny \textcolor{orange}{\texttt{6}}};
-
-\node<1> at 	(1.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
-\node<1> at 	(2.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
-\node<1> at 	(3.5,-1.7) {\textcolor{markgreen}{\Large \texttt{c}}};
-\node<1> at 	(4.5,-0.5) {\textcolor{red}{\Large \texttt{d}}};
-\node<1> at 	(4.5,-1.7) {\textcolor{red}{\Large \texttt{a}}};
-
-\node<2> at 	(4.5,-0.5) {\textcolor{red}{\Large \texttt{d}}};
-\node<2> at 	(4.5,-1.7) {\textcolor{red}{\Large \texttt{a}}};
-
-\node<3> at 	(5.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
-\node<3> at 	(6.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
-\node<3> at 	(7.5,-1.7) {\textcolor{markgreen}{\Large \texttt{c}}};
-\node<3> at 	(8.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
-\node<3> at 	(9.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
-\node<3> at 	(10.5,-0.5) {\textcolor{red}{\Large \texttt{c}}};
-\node<3> at 	(10.5,-1.7) {\textcolor{red}{\Large \texttt{d}}};
-
-\node<4> at 	(10.32,-2.9) {\textcolor{orange}{ \rotatebox[origin=c]{270}{\Huge $\Lsh$}}};
-\node<4> at 	(10.5,-1.7) {\textcolor{markgreen}{\Large \texttt{c}}};
-\node<4> at 	(11.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
-\node<4> at 	(12.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
-\node<4> at 	(13.5,-1.7) {\textcolor{markgreen}{\Large \texttt{d}}};
-
-\node[visible on=<4>] at (13.9,.3) {\textcolor{markgreen}{\Large $\checkmark$}};
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-\begin{frame}{Einführungsbeispiel}
-\begin{table}\setlength\extrarowheight{.3em}
-\begin{tabularx}{.8\textwidth}{CC@{\hskip 2em}ccccccccccccc}
-\toprule
-& & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12&13 \\
-$s$ & $j$ &a&b&c&d&a&b&c&a&b&c&a&b&d\\
-\midrule
-0 & 4 & a & b & c & \red{a} & \gray{b} & \gray{d} &&&&&&&\\ 
-3 & 1 &&&& \red{a} & \gray{b} & \gray{c} & \gray{a} & \gray{b} & \gray{d} &&&&\\ 
-4 & 6 &&&&& a & b & c & a & b & \red{d} &&&\\ 
-\green{7} & 7 &&&&&&&& \gray{a} & \gray{b} & c & a & b & d \\
-\bottomrule
-\end{tabularx}
-\caption{KMP-Algorithmus, Beispiel}
-\end{table}
-\end{frame}
 
 \begin{frame}{Einführung}
 \textbf{Beobachtung:} Finden wir ein \textit{Präfix $u$ des Musters $p$} im erfolgreich gescannten Teil $v$ wieder, können wir dieses als \glqq Fallback-Position\grqq\ nutzen.\bigskip\medskip
@@ -508,7 +400,7 @@ Der KMP-Algorithmus wird folglich in zwei Phasen aufgeteilt:\bigskip
 
 \subsection{Vorlaufphase}
 
-\begin{frame}{Präfixfunktion}
+\begin{frame}{Vorlaufphase}
 \begin{defi}
 Seien $u,x$ Wörter über $\Sigma$ mit $\vert u\vert <\vert x\vert$. Wir nennen $u$ \textit{Rand} von $x$, falls $v,w\in\Sigma^+$ ex.\ mit \[x=uv=wu\]
 \end{defi}
@@ -518,7 +410,7 @@ Mit anderen Worten:\smallskip
 Ein Rand ist sowohl \emph{echtes Präfix}, als auch \emph{echtes Suffix} eines Wortes.
 \end{frame}
 
-\begin{frame}{Präfixfunktion}
+\begin{frame}{Vorlaufphase}
 \textbf{Beispiel:}\bigskip
 
 Sei $p=\texttt{011110110}$. Wie lautet die Menge der Ränder von $p$?\pause
@@ -526,7 +418,7 @@ Sei $p=\texttt{011110110}$. Wie lautet die Menge der Ränder von $p$?\pause
 \[\{\varepsilon,\texttt{0}\}\]
 \end{frame}
 
-\begin{frame}{Präfixfunktion}
+\begin{frame}{Vorlaufphase}
 \textbf{Noch ein Beispiel:}\bigskip
 
 Sei $p=\texttt{0101010101}$. Wie lautet die Menge der Ränder von $p$?\pause
@@ -534,7 +426,7 @@ Sei $p=\texttt{0101010101}$. Wie lautet die Menge der Ränder von $p$?\pause
 \[\{\varepsilon,\texttt{01},\texttt{0101},\texttt{010101},\texttt{01010101}\}\]
 \end{frame}
 
-\begin{frame}{Präfixfunktion}
+\begin{frame}{Vorlaufphase}
 \begin{center}
 \resizebox {0.8\textwidth} {!} {
 \begin{tikzpicture}[thick, anchor=base ]
@@ -623,7 +515,7 @@ Wir suchen also die Länge $k$ des größten Randes von $p[1\tdots j]$ für alle
 
 Als Hilfsmittel wollen wir eine Funktion $\pi_p$ definieren, sodass $\pi_p(j)=k$.\bigskip\pause
 
-\textit{Mismatch bei $j$:} Wir dürfen $j-\pi_p(j)$ Schritte weiterschieben (relativ zu $s$)!
+\textit{Mismatch bei $j+1$:} Wir dürfen $j-\pi_p(j)$ Schritte weiterschieben (relativ zu $s$)!
 \end{frame}
 
 \begin{frame}{Präfixfunktion}
@@ -635,7 +527,7 @@ Sei $p$ ein Wort über $\Sigma$ mit $\vert p\vert=m$ und sei $j\geq 1$. Die \emp
 Ist $p$ vom Kontext her klar, schreiben wir kurz $\pi$ statt $\pi_p$.
 \end{frame}
 
-\begin{frame}{Präfixfunktion: Beispiel}
+\begin{frame}[label=prefix]{Präfixfunktion: Beispiel}
 \begin{table}\setlength\extrarowheight{.3em}
 \begin{tabular}{r@{\hskip 2em}ccccccc}
 \toprule
@@ -644,22 +536,67 @@ $p[j]$ & a & b & a & b & a & c & a \\
 $\pi(j)$ & 0 & 0 & 1 & 2 & 3 & 0 & 1 \\ 
 \bottomrule
 \end{tabular}
-\caption{\cite{cormenalgorithms2009}: Präfixfunktion $\pi$}
+\caption{\cite{cormenalgorithms2009}: Präfixfunktion $\pi$ für ababaca}
 \end{table}
 \end{frame}
 
+\begin{frame}<1>[label=prefun]{Präfixfunktion}
+\frametitle<1>{Präfixfunktion}
+\frametitle<2>{Präfixfunktion: Analyse}
+\begin{mybox}{Berechnung der Präfixfunktion \cites{cormenalgorithms2009}}
+\begin{algorithmic}[1]
+\Require{Muster $p$ mit $\vert p\vert=m$}
+\Ensure{Funktion $\pi$ für $p$}\vspace*{1em}
+
+\centering
+\parbox[l]{8cm}{
+\State $\pi(1) = 0$, $k=0$
+\For{$j=2$ \textcolor{textgreen}{\textbf{to}} $m$}
+	\While{$k>0$ \textcolor{textgreen}{\textbf{and}} $p[k+1]\neq p[j]$}
+		\State $k=\pi(k)$
+	\EndWhile
+	\If {$p[k+1] ==\: p[j]$}
+		\State $k=k+1$
+	\EndIf
+	\State $\pi(j)=k$
+\EndFor
+}
+\vspace*{.4em}
+\State\parbox[l]{8.1cm}{\Return{$\pi$}}
+\end{algorithmic}
+\end{mybox}
+\end{frame}
 
 \begin{frame}{Endlicher Automat}
 \textbf{Vorteil:}\medskip
 
-Die Präfixfunktion kann man auch als Übergangsfunktion für einen \emph{endlichen Automaten} interpretieren:\medskip
+Die Präfixfunktion kann man auch für die Übergangsfunktion eines \emph{endlichen Automaten} nutzen:\medskip
 
 \begin{itemize}
-\item $j$ benutzen wir dafür als Zustände ($j+1$ Stück)
-\item $\pi(j)$ ist der Folgezustand bei einem Mismatch in Zustand $j+1$
+\item $i=0,\dots,j$ benutzen wir dafür als Zustände
+\item $\pi(i)$ ist der Folgezustand bei einem Mismatch in Zustand $i$
 \item restliche Übergänge: \glqq Rückgrat\grqq
 \end{itemize}
 \end{frame}
+
+\begin{frame}{Präfixfunktion}
+\begin{small}
+ERST ANALYSE, DANN DAS HIER SCHNELL ZU ENDE
+\begin{defi}
+Sei $f\colon\mathbb{D}\to\mathbb{Z}$ eine Funktion und seien $d\in\mathbb{D},\,i\geq 1$. Wir definieren induktiv:
+\begin{IEEEeqnarray*}{rCl}
+f^0(d)&=&d\\
+f^{i}(d)&=&f\big(f^{i-1}(d)\big)
+\end{IEEEeqnarray*}
+\end{defi}
+\begin{defi}
+Sei $p$ ein Wort, $\pi$ seine Präfixfunktion und $j\geq 1$. Wir definieren \[\pi^*(j)=\big(\pi(j),\pi^2(j),\dots,\pi^t(j)\big)\]
+wobei $\pi^t(j)=0$ für ein $t\geq 0$.
+\end{defi}
+\end{small}
+\end{frame}
+
+\againframe{prefix}
 
 \begin{frame}{Endlicher Automat}
 Wiederholung:\medskip
@@ -669,7 +606,7 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 \begin{enumerate}[(i)]
 \item $\Sigma$ ist ein Alphabet
 \item $Q$ ist eine endliche Menge von \emph{Zuständen}
-\item $s\in Q$ der \emph{Startzustand}
+\item $s\in Q$ ist der \emph{Startzustand}
 \item $F\subseteq Q$ ist die Menge der \emph{Endzustände} 
 \item $\delta\colon Q\times\Sigma\to Q$ ist die sog.\ \emph{Übergangsfunktion}
 \end{enumerate}
@@ -677,9 +614,10 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 \end{frame}
 
 \begin{frame}{Endlicher Automat}
-\textbf{Beispiel von eben:}
+\begin{small}\textbf{Beispiel von eben:}\end{small}
+\vspace*{-.5em}
 \begin{center}
-\resizebox {.8\textwidth}{!} {
+\resizebox {.75\textwidth}{!} {
 \begin{tikzpicture}[node distance=5em,auto,>=stealth,semithick]
 	\node[initial,initial=40,initial distance=1.5em,state,initial text={}] (q0) at(0,0){$0$};
 	\node[state] (q1) [right of=q0] {$1$};
@@ -709,7 +647,7 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 \end{tikzpicture}}
 \end{center}
 \begin{small}
-\vspace{-2em}\noindent Sei $A=(\Sigma, Q, s, F, \delta)$ ein DEA mit\medskip
+\vspace{-2.5em}\noindent Sei $A=(\Sigma, Q, s, F, \delta)$ ein DEA mit\medskip
 
 \begin{minipage}{0.4\textwidth}
 \begin{itemize}\itemsep0em 
@@ -723,7 +661,7 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 \begin{minipage}{0.55\textwidth}
 \begin{tabularx}{.9\textwidth}{r|CCCCCCCC}
 \toprule
-	&$\varepsilon$& $a$ & $b$ & $a$ & $b$ & $a$ & $c$ & $a$ \\
+	& $a$ & $b$ & $a$ & $b$ & $a$ & $c$ & $a$& \\
 	& $0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ &$7$\\\midrule
 $a$ & $\green{1} $& $0 $& $\green{3} $& $1 $& $\green{5} $& $3 $& $\green{7} $&--\\ 
 $b$ & $0 $& $\green{2} $& $0 $& $\green{4} $& $2 $& $3 $& $0 $&--\\ 
@@ -734,45 +672,210 @@ $c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\
 \end{small}
 \end{frame}
 
-\begin{frame}{Präfixfunktion}
-\begin{mybox}{Berechnung der Präfixfunktion \cites{cormenalgorithms2009}}
-\begin{algorithmic}[lines]
-\Require{Muster $p$ mit $\vert p\vert=m$}
-\Ensure{Funktion $\pi$ für $p$}\\\\
+\subsection{Suchphase}
+
+\begin{frame}[label=kmpsearch]
+\begin{mybox}{KMP-Suchlauf \cites{cormenalgorithms2009}}
+\begin{algorithmic}[1]
+\Require{Text $t$ mit $\vert t\vert=n$, Muster $p$ mit $\vert p\vert=m$}
+\Ensure{Menge gültiger Shifts vshifts}\vspace*{1em}
 
 \centering
-\parbox[l]{8cm}{
-\State $\pi(1) = 0$, $k=0$
-\For{$j=2$ \textcolor{textgreen}{\textbf{to}} $m$}
-	\While{$k>0$ \textcolor{textgreen}{\textbf{and}} $p[k+1]\neq p[j]$}
-		\State $k=\pi(k)$
+\parbox[l]{10cm}{
+\State $j=0$, $\pi=\mathrm{prefixfun}(p)$\qquad\Comment{$j$ $\hat{=}$ Anzahl Matches}
+\For{$i=1$ \textcolor{textgreen}{\textbf{to}} $n$}
+	\While{$j>0$ \textcolor{textgreen}{\textbf{and}} $p[j+1]\neq t[i]$}
+		\State $j=\pi(j)$
 	\EndWhile
-	\If {$p[k+1] ==\: p[j]$}
-		\State $k=k+1$
+	\If {$p[j+1] == t[i]$}\State $j=j+1$\qquad\qquad\qquad\Comment{Match!}
 	\EndIf
-	\State $\pi(j)=k$
+	\If {$j == m$}
+		\State \textgreen{\textbf{add}} $(i-m)$ \textgreen{\textbf{to}} vshifts
+		\State $j=\pi(j)$
+	\EndIf
 \EndFor
-
-\Return{$\pi$}
 }
+\vspace*{.4em}
+\State\parbox[l]{10.1cm}{\Return{vshifts}}
 \end{algorithmic}
 \end{mybox}
 \end{frame}
 
-\subsection{Suchphase}
+\begin{frame}{Beispiel}
+\begin{center}\vspace*{-1em}
+\begin{tikzpicture}[visible on=<1-4>,thick, scale=1, anchor=base ]
 
-\section{Analyse}
+\foreach \x/\y in {1/a,2/b,3/c,4/d,5/a,6/b,7/c,8/a,9/b,10/c,11/a,12/b,13/d} {
+	\draw[fill=chameleongreen2!50] (\x,-.85) rectangle (\x+1,0.15);
+    \node at (\x+.5,-0.5) {\Large \texttt{\y}};
+    \node at (\x+.5,0.3) {\tiny \texttt{\x}};
+}
 
-\subsection{Korrektheit der Präfix-Funktion}
-\subsection{Korrektheit des KMP-Algorithmus}
-\subsection{Exkurs: Fibonacci-Strings}
-\subsection{Palindrome}
+%\node<1> at (1,-3.3) {$s=0$};
+\node<2> at (2.5,-2) {$s=3$};
+\node<3> at (3,-2) {$s=4$};
+\node<4> at (4.5,-2) {$s=7$};
+
+\draw<2>[|->] (1,-1.55) -- (4,-1.55);
+\draw<3>[|->] (1,-1.55) -- (5,-1.55);
+\draw<4>[|->] (1,-1.55) -- (8,-1.55);
+
+\node at (0.3,-2.4) {\tiny $j$};
+\node<1-4> at (0.3,-0.5) {\small $t$};
+\node<1-4> at (0.3,-1.7) {\small $p$};
+
+\draw<1>[color= chameleongreen4] (0.95,-.9) rectangle (7.05,.2);
+\draw<2>[color= chameleongreen4] (3.95,-.9) rectangle (10.05,.2);
+\draw<3>[color= chameleongreen4] (4.95,-.9) rectangle (11.05,.2);
+\draw<4>[color= chameleongreen4](7.95,-.9) rectangle (14.05,.2);
+
+\node<-3> at 	(10.32,-2.9) {\textcolor{white}{ \rotatebox[origin=c]{270}{\Huge $\Lsh$}}};
+%anti-slip
+%\draw<2-4>[color=white] (0.95,0) -- (0.95,-0.05);
+%\draw[color=white] (14.95,0) -- (14.95,-0.05);
+%\draw[visible on=<1-5>, color=white] (1,-2.05) rectangle (2,-1.2);
+
+\foreach \x/\y in {1/a,2/b,3/c,4/a,5/b,6/d} {
+	\draw<1> 	(\x,-2.05) rectangle (\x+1,-1.05);
+    \node<1> at (\x+.5,-1.7) {\Large \texttt{\y}};
+    \node<1> at (\x+.5,-2.4) {\tiny \texttt{\x}};
+    \draw<2> 	(\x+3,-2.05) rectangle (\x+4,-1.05);
+    \node<2> at (\x+3.5,-1.7) {\Large \texttt{\y}};
+    \node<2> at (\x+3.5,-2.4) {\tiny \texttt{\x}};
+    \draw<3> 	(\x+4,-2.05) rectangle (\x+5,-1.05);
+    \node<3> at (\x+4.5,-1.7) {\Large \texttt{\y}};
+    \node<3> at (\x+4.5,-2.4) {\tiny \texttt{\x}};
+    \draw<4> 	(\x+7,-2.05) rectangle (\x+8,-1.05);
+    \node<4>at (\x+7.5,-1.7) {\Large \texttt{\y}};
+    \node<4>at (\x+7.5,-2.4) {\tiny \texttt{\x}};
+}
+
+%coloured s and j's
+%\node<1> at (1.5,0.3) {\tiny \textcolor{orange}{\texttt{1}}};
+%\node<2> at (4.5,0.3) {\tiny \textcolor{orange}{\texttt{4}}};
+%\node<3> at (5.5,0.3) {\tiny \textcolor{orange}{\texttt{5}}};
+%\node<4> at (8.5,0.3) {\tiny \textcolor{orange}{\texttt{8}}};
+\node<1> at (4.5,-2.4) {\tiny \textcolor{orange}{\texttt{4}}};
+\node<2> at (4.5,-2.4) {\tiny \textcolor{orange}{\texttt{1}}};
+\node<3> at (10.5,-2.4) {\tiny \textcolor{orange}{\texttt{6}}};
+\node<4> at (13.5,-2.4) {\tiny \textcolor{orange}{\texttt{6}}};
+
+\node<1> at 	(1.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
+\node<1> at 	(2.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
+\node<1> at 	(3.5,-1.7) {\textcolor{markgreen}{\Large \texttt{c}}};
+\node<1> at 	(4.5,-0.5) {\textcolor{red}{\Large \texttt{d}}};
+\node<1> at 	(4.5,-1.7) {\textcolor{red}{\Large \texttt{a}}};
+
+\node<2> at 	(4.5,-0.5) {\textcolor{red}{\Large \texttt{d}}};
+\node<2> at 	(4.5,-1.7) {\textcolor{red}{\Large \texttt{a}}};
+
+\node<3> at 	(5.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
+\node<3> at 	(6.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
+\node<3> at 	(7.5,-1.7) {\textcolor{markgreen}{\Large \texttt{c}}};
+\node<3> at 	(8.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
+\node<3> at 	(9.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
+\node<3> at 	(10.5,-0.5) {\textcolor{red}{\Large \texttt{c}}};
+\node<3> at 	(10.5,-1.7) {\textcolor{red}{\Large \texttt{d}}};
+
+\node<4> at 	(10.32,-2.9) {\textcolor{orange}{ \rotatebox[origin=c]{270}{\Huge $\Lsh$}}};
+\node<4> at 	(10.5,-1.7) {\textcolor{markgreen}{\Large \texttt{c}}};
+\node<4> at 	(11.5,-1.7) {\textcolor{markgreen}{\Large \texttt{a}}};
+\node<4> at 	(12.5,-1.7) {\textcolor{markgreen}{\Large \texttt{b}}};
+\node<4> at 	(13.5,-1.7) {\textcolor{markgreen}{\Large \texttt{d}}};
+
+\node[visible on=<4>] at (13.9,.3) {\textcolor{markgreen}{\Large $\checkmark$}};
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Beispiel}
+\begin{table}\setlength\extrarowheight{.3em}
+\begin{tabularx}{.8\textwidth}{CC@{\hskip 2em}ccccccccccccc}
+\toprule
+& & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12&13 \\
+$s$ & $j$ &a&b&c&d&a&b&c&a&b&c&a&b&d\\
+\midrule
+0 & 4 & a & b & c & \red{a} & \gray{b} & \gray{d} &&&&&&&\\ 
+3 & 1 &&&& \red{a} & \gray{b} & \gray{c} & \gray{a} & \gray{b} & \gray{d} &&&&\\ 
+4 & 6 &&&&& a & b & c & a & b & \red{d} &&&\\ 
+\green{7} & 7 &&&&&&&& \gray{a} & \gray{b} & c & a & b & d \\
+\bottomrule
+\end{tabularx}
+\caption{KMP-Algorithmus, Beispiel}
+\end{table}
+\end{frame}
+
+\section{Laufzeitanalyse}
+
+\begin{frame}{Laufzeitanalyse}
+
+\begin{enumerate}[(1)]
+\item Analyse der Berechnung der Präfixfunktion, Aggregationsmethode nach \cite{cormenalgorithms2009}
+\item Analyse des KMP-Suchlaufs:
+
+\begin{enumerate}[(i)]
+\item Worst Case nach \cite{jewels}
+\item Average Case nach \cite{Regnier89}
+\item Delay nach \cite{KnuthMorrisPratt1977}
+\end{enumerate}
+\item Gesamtlaufzeit
+\end{enumerate}
+\end{frame}
+
+\subsection{Berechnung der Präfixfunktion}
+
+\againframe<2>{prefun}
+
+\begin{frame}{Präfixfunktion: Analyse}
+Wir wollen die Laufzeit der Berechnung der Präfixfunktion mit der \emph{Aggregationsmethode} zeigen, die in \cite{cormenalgorithms2009} vorgestellt wird.\medskip
+
+Die Aggregationsmethode ist ein Vorgehen der \emph{amortisierten Laufzeitanalyse}.\bigskip\pause
+
+\begin{theo}
+Sei $m=\vert p\vert$ für ein Muster $p$. Die Laufzeit des Algorithmus zur Berechnung der Präfixfunktion $\pi$ für $p$ beträgt $\Theta(m)$.
+\end{theo}
+\end{frame}
+
+\begin{frame}{Präfixfunktion: Analyse}
+\begin{small}
+\textbf{\textit{Beweis} (\cite{cormenalgorithms2009}).}
+%Die \texttt{while}-Schleife in Zeile 3 ist der einzige schwierig abzuschätzende Teil. 
+Wir betrachten $k$: 
+\begin{enumerate}[(1)]
+\item Nach der Initialisierung mit $0$ kann $k$ nur durch das Inkrement in Z.\ 6 erhöht werden, das pro Iteration der For-Schleife \emph{höchstens ein Mal} ausgeführt wird. Damit wird $k$ insgesamt \emph{höchstens $m-1$ mal} inkrementiert (wegen $j=2,\dots,m$).
+\item Mit jeder Iteration der For-Schleife wird $j$ inkrementiert, und vorher gilt $k<j$. Da $k$ wegen (1) nicht stärker wächst als $j$, gilt stets $k<j$ und damit $\pi(j)<j$ für $j=1,2,\dots,m$, wegen Z.\ 1\&7. D.\,h., jede Iteration der While-Schleife setzt $k$ herab.
+\item Es gilt stets $k\geq 0$, wegen Z.\ 1 und der ersten Bedingung der While-Schleife.
+\end{enumerate}
+Also ist die gesamte Dekrementierung von $k$ in der While-Schleife nach oben beschränkt, und zwar durch die $(m-1)$-malige Inkrementierung von $k$ in der For-Schleife. Die While-Schleife iteriert daher insgesamt höchstens $m-1$ mal, und wir haben eine Laufzeit von $\Theta(m)$.\qed
+\end{small}
+\end{frame}
+
+\subsection{KMP-Suchlauf}
+
+\againframe{kmpsearch}
+
+\begin{frame}{KMP-Suchlauf: Analyse}
+\begin{theo}
+Seien $n=\vert t\vert$ und $m=\vert p\vert$ für einen Text $t$ und ein Muster $p$. Die Laufzeit des KMP-Suchalgorithmus beträgt $\Theta(n)$.
+\end{theo}
+\begin{proof}
+Analog zu Satz 1: $j$ wird in der While-Schleife dekrementiert, aber es gilt stets $j\geq 0$. Also kann $j$ höchstens mit jedem Inkrement in Z.\ 6 dekrementiert werden. Die betreffende For-Schleife wird höchstens $n-1$ mal ausgeführt, und so auch die While-Schleife. Also ist die Laufzeit $\Theta(n)$.
+\end{proof}
+\end{frame}
+
+\begin{frame}{Exkurs: Fibonacci-Strings}
+
+
+\end{frame}
 
 \section{Fazit}
 
 \begin{frame}{Literatur}
 \nocite{*}
+\begin{small}
 \printbibliography
+\end{small}
+
 \end{frame}
 
 \againframe[plain, t]{titel}

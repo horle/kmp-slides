@@ -30,13 +30,12 @@
 \algrenewcommand\algorithmicif{\textcolor{textgreen}{\textbf{if}}}
 \algrenewcommand\algorithmicelse{\textcolor{textgreen}{\textbf{else}}}
 \algrenewcommand\algorithmicend{\textcolor{textgreen}{\textbf{end}}}
-%\algrenewcommand\algorithmicto{\textcolor{textgreen}{\textbf{to}}}
 \algrenewcommand\algorithmicdo{\textcolor{textgreen}{\textbf{do}}}
 \algrenewcommand\algorithmicreturn{\textcolor{textgreen}{\textbf{return}}}
 \algrenewcommand\algorithmicthen{\textcolor{textgreen}{\textbf{then}}}
 
 % redefine comments
-\algrenewcommand{\algorithmiccomment}[1]{{\color{textgreen!50}\textit{//#1}}}
+\algrenewcommand{\algorithmiccomment}[1]{{\color{textgreen!80}\textit{\% #1}}}
 
 %COLORBOX
 \newtcolorbox{mybox}[1]{
@@ -49,6 +48,16 @@ titlerule=0pt,
 arc=10pt,
 title={\strut\textcolor{textgreen}{\textbf{#1}}}
 }
+\newtcolorbox{mybluebox}[1]{
+colback=chameleongreen4!30,
+colbacktitle=chameleongreen4!50,
+coltitle=black,
+colframe=textblue,
+boxrule=1pt,
+titlerule=0pt,
+arc=10pt,
+title={\strut\textcolor{textblue}{\textbf{#1}}}
+}
 
 \newcounter{definition}
 \resetcounteronoverlays{definition}
@@ -57,6 +66,14 @@ title={\strut\textcolor{textgreen}{\textbf{#1}}}
 	\begin{mybox}{Definition \define}
 }
 {\end{mybox}}
+
+%\newcounter{theorem}
+\resetcounteronoverlays{theorem}
+\newcommand{\theor}{\refstepcounter{theorem}\thetheorem}
+\newenvironment{theo}{
+	\begin{mybluebox}{Satz \theor}
+}
+{\end{mybluebox}}
 
 \author[Felix Kußmaul]{\Large Felix Kußmaul}
 \title[Der KMP-Algorithmus]{\LARGE Der Knuth-Morris-Pratt-Algorithmus}
@@ -78,6 +95,7 @@ title={\strut\textcolor{textgreen}{\textbf{#1}}}
 
 \colorlet{markgreen}{chameleongreen3} %chameleongreen3!50!chameleongreen1}
 \colorlet{textgreen}{chameleongreen3!70!black}
+\colorlet{textblue}{chameleongreen4!70!black}
 
 \setbeamercolor{enumerate item}{fg=textgreen}
 %\setbeamercolor{itemize item}{fg=textgreen}
