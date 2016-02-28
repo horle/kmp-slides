@@ -96,11 +96,11 @@ Für eine gegebene Funktion $g(n)$ definieren wir die Mengen
 \onslide<4>{\textit{Ohne Beweis:} Für zwei Funktionen $f(n),\,g(n)$ gilt $f(n)\in\Theta\big(g(n)\big)$ genau dann, wenn $f(n)\in\mathcal{O}\big(g(n)\big)$ und $f(n)\in\Omega\big(g(n)\big)$.\qed}
 \end{frame}
 
-\begin{frame}{Grundbegriffe Komplexität}
-\begin{defi}
-Die (gewöhnliche) \emph{erzeugende Funktion} (OGF) einer Folge $a_0,a_1,\dots,a_k,\dots$ ist def.\ als \[A(z)=\sum_{k\geq 0}a_kz^k\] Wir schreiben $[z^k]A(z)$ für den Koeffizienten $a_k$.
-\end{defi}
-\end{frame}
+%\begin{frame}{Grundbegriffe Komplexität}
+%\begin{defi}
+%Die (gewöhnliche) \emph{erzeugende Funktion} (OGF) einer Folge $a_0,a_1,\dots,a_k,\dots$ ist def.\ als \[A(z)=\sum_{k\geq 0}a_kz^k\] Wir schreiben $[z^k]A(z)$ für den Koeffizienten $a_k$.
+%\end{defi}
+%\end{frame}
 
 \begin{frame}[<+->]{Konventionen}
 Sei $\Sigma$ ein Alphabet. Wir schreiben\bigskip
@@ -510,8 +510,7 @@ Sei $p=\texttt{0101010101}$. Wie lautet die Menge der Ränder von $p$?\pause
 
 \fill[visible on=<3->,fill=white] (1,1.01) rectangle (13,3);
 \end{tikzpicture}}
-\end{center}\medskip
-
+\end{center}
 Ang., $p[1\tdots j] == t\big[(s+1)\tdots(s+j)\big]$.\only<1>{\bigskip\bigskip\bigskip\bigskip} \only<2-3>{Was ist das kleinste $s'>s$, sodass für ein $k<j$:\[p[1\tdots k] == t\big[(s'+1)\tdots(s'+k)\big]\] gilt, mit $s'+k=s+j$?}
 \only<4>{Was ist das größte $k<j$, sodass:\[p[1\tdots k] \text{ ist Rand von } p[1\tdots j]\] gilt, mit $s'=s+(j-k)$ und $s'$ als nächstem Shift-Kandidaten?}
 \end{frame}
@@ -820,11 +819,9 @@ $s$ & $j$ &a&b&c&d&a&b&c&a&b&c&a&b&d\\
 \item Analyse des KMP-Suchlaufs:
 
 \begin{enumerate}[(i)]
-\item Worst Case nach \cite{jewels}
-\item Average Case nach \cite{Regnier89}
+\item Aggregation nach \cite{cormenalgorithms2009}
 \item Delay nach \cite{KnuthMorrisPratt1977}
 \end{enumerate}
-\item Gesamtlaufzeit
 \end{enumerate}
 \end{frame}
 
@@ -867,59 +864,138 @@ Seien $n=\vert t\vert$ und $m=\vert p\vert$ für einen Text $t$ und ein Muster $
 \begin{proof}
 Analog zu Satz 1: $j$ wird in der While-Schleife dekrementiert, aber es gilt stets $j\geq 0$. Also kann $j$ höchstens mit jedem Inkrement in Z.\ 6 dekrementiert werden. Die betreffende For-Schleife wird höchstens $n-1$ mal ausgeführt, und so auch die While-Schleife. Also ist die Laufzeit $\Theta(n)$.
 \end{proof}
+Die Gesamtlaufzeit (Erstellen der Präfixfunktion und Suchlauf) beträgt damit $\Theta(m+n)$.
 \end{frame}
 
-\begin{frame}{KMP-Suchlauf: Average Case Analyse}
-\textbf{Beobachtung:}\medskip
+\begin{frame}{KMP-Suchlauf: Delay Analyse}
+Unter dem \emph{Delay} von einem Zeichen im Text verstehen wir die größtmögliche Anzahl der Vergleiche auf diesem Zeichen.\medskip
 
-Für jedes Zeichen $a$ im Text hängt die Anzahl der Vergleiche mit dem Muster $p$ höchstens von den $\vert p'\vert$ letzten Zeichen im Text ab.
+Man kann zeigen, dass der maximale Delay beim KMP-Algorithmus $\mathcal{O}\big(\log(m)\big)$ beträgt \cite{KnuthMorrisPratt1977}.\bigskip
+
+Dafür wollen wir zunächst einige Eigenschaften von Strings zeigen.
 \end{frame}
 
-\begin{frame}{KMP-Suchlauf: Average Case Analyse}
-\begin{lemm}
-Für jedes $a=t[i]$ mit $i=1,\dots,n$ gilt: Sei $p'$ das größtmögliche echte Präfix von $p$, auf das $a$ im Text folgt, also:
-\[t\big[(s+1)\tdots(s+k+1)\big]=p'a\]
-für ein $s\geq 0$, wobei $k=\vert p'\vert$ und $0\leq k\leq \vert p\vert$. Dann ist der erste Vergleich von $a$ mit einem Zeichen in $p$ an der Stelle $k+1$.
-\end{lemm}
-\begin{proof}
-Tafel.
-\end{proof}
+\begin{frame}{Einschub: Perioden}
+\begin{defi}
+Sei $u=a_1\cdots a_n$ ein Wort über $\Sigma$ mit $n\geq 0$. Wir nennen $\mathfrak{p}\geq 1$ eine \emph{Periode} des Wortes $u$, wenn für alle $1\leq i\leq n-\mathfrak{p}$ gilt: \[a_i=a_{i+\mathfrak{p}}\]
+\end{defi}
+\pause\medskip
+
+
+\textbf{Beispiel:} Sei $w = aabaaba$. Dann sind $\mathfrak{p}_1,\mathfrak{p}_2,\mathfrak{p}_3$ Perioden von $w$:
+\begin{IEEEeqnarray*}{rClCl}
+\ell_1&=&\vert aab\vert&=&3,\\
+\ell_2&=&\vert aabaab\vert&=&6,\\
+\ell_3&=&\vert aabaaba\vert&=&7
+\end{IEEEeqnarray*}
 \end{frame}
 
-\begin{frame}{KMP-Suchlauf: Average Case Analyse}
-\textit{Ziel:} Zählen der möglichen Wörter $p'$ mit je $\vert p'\vert$ Vergleichen, und OGF ableiten.\bigskip
+\begin{frame}{Einschub: Perioden}
+\begin{mybluebox}{Lemma \lema\ (Periodizitätslemma) \cite{diskrete}.}
+Seien $\mathfrak{p}_1,\mathfrak{p}_2$ zwei Perioden eines Wortes $w$. Wenn $\vert w\vert+\mathrm{ggT}(\mathfrak{p}_1,\mathfrak{p}_2) \geq \mathfrak{p}_1+\mathfrak{p}_2$, dann ist auch ggT$(\mathfrak{p}_1,\mathfrak{p}_2)$ eine Periode von $w$.
+\end{mybluebox}
+\pause
+\textbf{Beispiel:}
+\vspace*{-2em}
+\begin{IEEEeqnarray*}{r"llllll}
+w											&  aab&aab&aab&aab&aab&aab\\
+\mathfrak{p}_1=9:							&  \red{aab}&\red{aab}&\red{aab}\\
+											&&&& \red{aab}&\red{aab}&\red{aab}\\
+\mathfrak{p}_2=6:							&  \blue{aab}&\blue{aab}&&&\blue{aab}&\blue{aab}\\
+											&&&\blue{aab}&\blue{aab}\\
+\mathrm{ggT}(\mathfrak{p}_1,\mathfrak{p}_2)=3:&  \green{aab}&&\green{aab}&&\green{aab}\\
+											&&\green{aab}&&\green{aab}&&\green{aab}
+\end{IEEEeqnarray*}
+
+\end{frame}
+
+\begin{frame}{Einschub: Starke Ränder}
+Dafür wollen wir zunächst eine Eigenschaft von Rändern zeigen.\medskip
 
 \begin{defi}
-Sei $s$ ein Parameter für alle $w\in S$ mit $S\subseteq\Sigma^*$. Die erzeugende Funktion $\Phi_S$ für die Menge $S$ ist def.\ als \[\Phi_S(z)=\sum_{k}s_kz^k\]
-wobei $s_k$ der \emph{Durchschnittswert} von $s$ für $w$ ist mit $\vert w\vert=k$.
+Seien $u,x$ Wörter und $ua$ Präfix von $x$. Ein \emph{starker Rand} von $u$ ist jeder Rand $v$ von $u$, sodass $va$ \emph{kein} Präfix von $u$ ist.
 \end{defi}
+\pause\bigskip
+
+\begin{center}
+\resizebox {0.9\textwidth} {!} {
+\begin{tikzpicture}[thick]
+\draw[fill=chameleongreen2!35] (0,0) rectangle (11,1);
+\draw (11,0) rectangle (12,1);
+\draw[fill=chameleongreen2] (0,0) rectangle (2,1);
+\draw[fill=chameleongreen2] (9,0) rectangle (11,1);
+\draw[fill=red!35] (2,0) rectangle (3,1);
+\draw (12,1) -- (13,1);
+\draw (12,0) -- (13,0);
+\node at (12.5,0.5) {\dots};
+\node at (-1,0.5) {\LARGE $x$};
+\node at (1,0.5) {\Large $v$};
+\node at (10,0.5) {\Large $v$};
+\node at (2.5,0.5) {\large $\neq a$};
+\node at (11.5,0.5) {\Large $a$};
+
+\draw[|-|] (0,-.75) -- (11,-.75) node [midway,fill=white] {\Large $u$};
+%\draw [line width=1pt,decorate,decoration={brace,amplitude=10pt,mirror}](0,0) -- (12,0) node[midway,yshift=-2.5em] {\Large $v=p[1\tdots j]$};
+\end{tikzpicture}}
+\end{center}
 \end{frame}
 
-\begin{frame}{KMP-Suchlauf: Average Case Analyse}
-Einige Regeln für Strings:\medskip
+\begin{frame}{KMP-Suchlauf: Delay Analyse}
+\begin{lemm}\label{lem:stark}
+Sei $w$ ein Präfix vom Muster $p$. Sei nun $u$ ein starker Rand von $w$ und $v$ ein starker Rand von $u$. Dann gilt: \[\vert w\vert > \vert u\vert +\vert v\vert +1\]
+\end{lemm}\bigskip
 
-Seien $\Phi_A(z), \Phi_B(z)$ die OGFs für die Mengen $A,B\subseteq\Sigma^*$ mit $A\neq B$ und seien $u\in A$, $v\in B$.
-\begin{enumerate}[(a)]
-\item \emph{Additivität:} Wenn $A\cap B=\emptyset$, dann ist $\Phi_A(z)+ \Phi_B(z)$ Die OFG für $A\cup B$.
-\item \emph{Konkatenation:} Ist die Zerlegung von $x=uv$ eindeutig, dann gilt \[\Phi_{AB}(z)=\Phi_A(z)\cdot \Phi_B(z)\]
-\item \emph{Wiederholung:} Z.\,B.\ für zwei Wörter $x=vv$, $y=vuv$: \[\Phi_{B}(z^2)\text{ und }\Phi_B(z^2)\cdot\Phi_A(z)\]
-\end{enumerate}
+\textbf{\textit{Beweis} (\cite{purdue}).} Wir betrachten die Zeichen $a=p[\vert u\vert+1]$ und $b=p[\vert v\vert+1]$, per Def.\ von $v$ gilt $a\neq b$.\medskip
+
+Da $u,v$ Ränder von $w$, sind $\mathfrak{p}_1=\vert w\vert -\vert u\vert$ und $\mathfrak{p}_2=\vert w\vert -\vert v\vert$ Perioden von $w$.
+\end{frame}\medskip
+
+\begin{frame}{KMP-Suchlauf: Delay Analyse}
+Angenommen, $\vert w\vert \leq \vert u\vert+\vert v\vert +1$, dann ist $\mathfrak{p}_1+\mathfrak{p}_2-1\leq \vert w\vert$. Nach dem Periodizitätslemma gilt auch: $\mathfrak{p}_3=\mathfrak{p}_2-\mathfrak{p}_1$ ist eine Periode von $w$ (*).\medskip
+
+Die beiden Zeichen $a$ und $b$ liegen genau $\mathfrak{p}_3$ Schritte auseinander und es gilt $a=b$ wegen (*). Es liegt ein Widerspruch vor, damit: $\vert w\vert > \vert u\vert +\vert v\vert +1$.\qed
 \end{frame}
 
-\begin{frame}{OGF String Beispiel}
-Sei $\Sigma$ ein Alphabet mit $\vert\Sigma\vert=q$. Die OGF, die $\Sigma^*$ durchzählt, ist \[\Phi_\Sigma(z)=\frac{1}{1-qz}\]
-\end{frame}
-
-\begin{frame}{KMP-Suchlauf: Average Case Analyse}
+\begin{frame}{KMP-Suchlauf: Delay Analyse}
 \begin{theo}
-Sei $C_n(p)$ die durchschnittliche Anzahl von Vergleichen im KMP-Algorithmus für einen Text der Länge $n$ und ein Muster $p$. Sei $\bar{C}_n$ der Durchschnittswert von $C_n(p)$ für alle $p$. Dann gilt:
+Der Delay des KMP-Suchlaufs ist nach oben beschränkt durch $\log_\phi(m+1)$ mit \[\phi=\frac{1+\sqrt{5}}{2}\approx 1,681\dots\] wobei $m=\vert p\vert$.
 \end{theo}
 \end{frame}
 
-\begin{frame}{Exkurs: Fibonacci-Strings}
-
-
+\begin{frame}{Beweis der Delay Analyse}
+\textbf{\textit{Beweis} (\cite{purdue}, \cite{KnuthMorrisPratt1977}).} Sei $d>0$ der Delay des KMP-Algorithmus bei der Suche nach Muster $p$. Die längstmögliche Folge 
+\begin{equation}\label{eq:seq}
+\big(w, \mathrm{starkRand}(w), \mathrm{starkRand}^2(w), \dots, \mathrm{starkRand}^{d-1}(w)\big)
+\end{equation}
+für ein Präfix $w$ von $p$ hat die Länge $d$, wobei $\mathrm{starkRand}^d(w)$ undefiniert ist.
+%Wir dürfen davon ausgehen, dass $w$ \emph{echtes} Präfix von $p$ ist, da die Anzahl der Vergleiche von $p$ mit $t$ bei einem Vorkommen mit Shift $s$ gleich der Anzahl derer bei einem Mismatch nach dem Vorkommen des größten Randes von $p$, welches auch echtes Präfix von $p$ ist.
 \end{frame}
+
+\begin{frame}{Beweis der Delay Analyse}
+Wir zeigen durch Induktion über $d$, dass wenn Folge (\ref{eq:seq}) für $w$ Länge $d$ hat, 
+\begin{equation}\label{eq:fib}
+\vert w\vert\geq F_{d+2}-2
+\end{equation}
+gilt mit: $F_{d}$ ist die $d$-te Fibonacci-Zahl.
+
+\begin{description}
+\item[I.\,A.] Für $d=1$ gilt: $F_3-2=2-2=0$.
+
+Für $d=2$ gilt: $F_4-2=3-2=1$, außerdem ist (\ref{eq:fib}) für $\vert w\vert=1$ erfüllt.
+\end{description}
+\end{frame}
+
+\begin{frame}{Beweis der Delay Analyse}
+\begin{description}
+\item[I.\,S.] Für $d\geq 3$ ex.\ $u=\mathrm{starkRand}(w)$ und $v=\mathrm{starkRand}(u)=\mathrm{starkRand}^2(w)$.
+
+Nach I.\,V.\ gilt für beide: $\vert u\vert\geq F_{d+1}-2$ und $\vert v\vert\geq F_d-2$. Wegen Lemma \ref{lem:stark} gilt dann: \[\vert w\vert\geq \vert u\vert+\vert v\vert+2\geq F_{d+1}-2+F_d-2+2=F_{d+2}-2\]
+Induktionsschluss.
+\end{description}\medskip
+
+Es ist bekannt, dass $F_d\geq \frac{\phi^d}{\sqrt{5}}$. Wir erhalten $\vert w\vert\geq\phi^d-2$, und schließlich $m+1\geq\phi^d$ bzw.\ $d\leq\log_\phi(m+1)$.\qed 
+\end{frame}
+
 
 \section{Fazit}
 
