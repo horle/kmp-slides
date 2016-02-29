@@ -578,13 +578,7 @@ $\pi(j)$ & 0 & 0 & 1 & 2 & 3 & 0 & 1 \\
 \begin{frame}{Endlicher Automat}
 \textbf{Vorteil:}\medskip
 
-Die Präfixfunktion kann man auch für die Übergangsfunktion eines \emph{endlichen Automaten} nutzen:\medskip
-
-\begin{itemize}
-\item $i=0,\dots,j$ benutzen wir dafür als Zustände
-\item $\pi(i)$ ist der Folgezustand bei einem Mismatch in Zustand $i$
-\item restliche Übergänge: \glqq Rückgrat\grqq
-\end{itemize}
+Die Präfixfunktion für $p$ kann man auch für die Übergangsfunktion eines \emph{endlichen Automaten} nutzen.\medskip
 \end{frame}
 
 \begin{frame}{Präfixfunktion}
@@ -603,8 +597,6 @@ wobei $\pi^t(j)=0$ für ein $t\geq 0$.
 \end{small}
 \end{frame}
 
-\againframe{prefix}
-
 \begin{frame}{Endlicher Automat}
 Wiederholung:\medskip
 
@@ -620,9 +612,41 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 \end{defi}
 \end{frame}
 
-\begin{frame}{Endlicher Automat}
-\begin{small}\textbf{Beispiel von eben:}\end{small}
+\begin{frame}{Zusammenhang $\delta$, $\pi$}
+Wir benutzen zur Konstruktion unseres DEAs $A$ folgende Dinge:
+
+\begin{itemize}
+\item $i=0,\dots,j$ nehmen wir als Zustände
+\item Matchende Übergänge: \glqq Rückgrat\grqq\ von $A$ (unabhängig von $\pi$)\pause
+\item Bei einem Mismatch iteriert man durch $\pi^*(j)$ bis einem Zustand $\ell$, wobei entweder
+
+\begin{enumerate}[(a)]
+\item $a=p[\ell+1]$, d.\,h.\ ein Match gefunden wurde, dann ist $\ell+1=\delta(j,a)$\medskip\pause
+\item $\ell=0$, d.\,h.\ Neustart, falls kein Match gefunden wurde
+\end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Zusammenhang $\delta$, $\pi$}
+\textbf{Beispiel von eben:}\vspace*{-2em}
+\begin{table}\setlength\extrarowheight{.3em}
+\begin{tabular}{r@{\hskip 2em}ccccccc}
+\toprule
+$j$ & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+$p[j]$ & a & b & a & b & a & c & a \\ 
+$\pi(j)$ & 0 & 0 & 1 & 2 & 3 & 0 & 1 \\ 
+\bottomrule
+\end{tabular}
+\caption{\cite{cormenalgorithms2009}: Präfixfunktion $\pi$ für ababaca}
+\end{table}
 \vspace*{-.5em}
+Angenommen, der Automat ist in Zustand $j=5$ mit $\pi^*(5)=(3,1,0)$, und das nächste Zeichen $a=\mathrm{b}$. Der Automat sollte nun laut Tabelle in $\delta(5,\mathrm{b})=4$ landen.\pause\medskip
+
+Nach einmaliger Ausführung der While-Schleife, ist der neue Zustand $\ell=\pi(5)=3$. Da $p[\ell+1]=p[4]=\mathrm{b}$, ist die Bedingung in Z.\ 8 wahr und der neue Zustand ist $\ell+1=4=\delta(5,\mathrm{b})$.
+\end{frame}
+
+\begin{frame}{Endlicher Automat}
+%\vspace*{-3em}
 \begin{center}
 \resizebox {.75\textwidth}{!} {
 \begin{tikzpicture}[node distance=5em,auto,>=stealth,semithick]
@@ -644,13 +668,19 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 		(q5) edge [above] node {$c$} (q6)
 		(q6) edge [above] node {$a$} (q7)
 		
-		(q0) edge [distance=1em,loop above] node{$b,c$} (q0)
-		(q1) edge [bend left,above,out=40,in=140] node {$a,c$} (q0)
-		(q2) edge [bend left,below right,out=30,in=140] node {$b,c$} (q0)
-		(q3) edge [bend right,above,out=320,in=220] node {$a,c$} (q1)
-		(q4) edge [bend left,out=40,in=140]node {$b,c$} (q2)
-		(q5) edge [bend right,above,out=320,in=220] node {$a,b$} (q3)
-		(q6) edge [bend left,out=20,in=140] node {$b,c$} (q0);	
+%		(q0) edge [distance=1em,loop above] node{$b,c$} (q0)
+%		(q1) edge [bend left,above,out=40,in=140] node {$c$} (q0)
+		(q1) edge [distance=1em,loop above] node {$a$} (q1)
+%		(q2) edge [bend left,below left,out=30,in=150] node {$b,c$} (q0)
+%		(q3) edge [bend right,above,out=320,in=220] node {$c$} (q0)
+		(q3) edge [bend right,above right,out=320,in=220] node {$a$} (q1)
+%		(q4) edge [bend left,out=40,in=140]node {$b,c$} (q0)
+		(q5) edge [bend right,below,out=320,in=220] node {$a$} (q1)
+		(q5) edge [bend left,below right,out=30,in=150] node {$b$} (q4)
+%		(q6) edge [bend left,out=20,in=140] node {$b,c$} (q0)
+		(q7) edge [bend left,out=320,in=220] node {$a$} (q1)
+		(q7) edge [bend left,above left,out=25,in=150] node {$b$} (q2)
+		;	
 \end{tikzpicture}}
 \end{center}
 \begin{small}
@@ -670,9 +700,9 @@ Ein \emph{deterministischer endlicher Automat} ist ein 5-Tupel $A=(\Sigma, Q, s,
 \toprule
 	& $a$ & $b$ & $a$ & $b$ & $a$ & $c$ & $a$& \\
 	& $0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ &$7$\\\midrule
-$a$ & $\green{1} $& $0 $& $\green{3} $& $1 $& $\green{5} $& $3 $& $\green{7} $&--\\ 
-$b$ & $0 $& $\green{2} $& $0 $& $\green{4} $& $2 $& $3 $& $0 $&--\\ 
-$c$ & $0 $& $0 $& $0 $& $1 $& $2 $& $\green{6} $& $0 $&--\\ 
+$a$ & $\green{1} $& $1 $& $\green{3} $& $1 $& $\green{5} $& $1 $& $\green{7} $&$1$\\ 
+$b$ & $0 $& $\green{2} $& $0 $& $\green{4} $& $0 $& $4 $& $0 $&$2$\\ 
+$c$ & $0 $& $0 $& $0 $& $0 $& $0 $& $\green{6} $& $0 $&$0$\\ 
 \bottomrule
 \end{tabularx}
 \end{minipage}
