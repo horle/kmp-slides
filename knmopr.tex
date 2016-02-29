@@ -944,10 +944,8 @@ w											&  aab&aab&aab&aab&aab&aab\\
 \end{frame}
 
 \begin{frame}{Einschub: Starke Ränder}
-Dafür wollen wir zunächst eine Eigenschaft von Rändern zeigen.\medskip
-
 \begin{defi}
-Seien $u,x$ Wörter und $ua$ Präfix von $x$. Ein \emph{starker Rand} von $u$ ist jeder Rand $v$ von $u$, sodass $va$ \emph{kein} Präfix von $u$ ist.
+Seien $u,x$ Wörter, $a$ ein Zeichen und $ua$ Präfix von $x$. Ein \emph{starker Rand} von $u$ ist jeder Rand $v$ von $u$, sodass $va$ \emph{kein} Präfix von $u$ ist.
 \end{defi}
 \pause\bigskip
 
@@ -977,7 +975,7 @@ Seien $u,x$ Wörter und $ua$ Präfix von $x$. Ein \emph{starker Rand} von $u$ is
 \begin{frame}{KMP-Suchlauf: Delay Analyse}
 \begin{lemm}\label{lem:stark}
 Sei $w$ ein Präfix vom Muster $p$. Sei nun $u$ ein starker Rand von $w$ und $v$ ein starker Rand von $u$. Dann gilt: \[\vert w\vert > \vert u\vert +\vert v\vert +1\]
-\end{lemm}\bigskip
+\end{lemm}\bigskip\pause
 
 \textbf{\textit{Beweis} (\cite{purdue}).} Wir betrachten die Zeichen $a=p[\vert u\vert+1]$ und $b=p[\vert v\vert+1]$, per Def.\ von $v$ gilt $a\neq b$.\medskip
 
@@ -1021,11 +1019,13 @@ Für $d=2$ gilt: $F_4-2=3-2=1$, außerdem ist (\ref{eq:fib}) für $\vert w\vert=
 
 \begin{frame}{Beweis der Delay Analyse}
 \begin{description}
-\item[I.\,S.] Für $d\geq 3$ ex.\ $u=\mathrm{starkRand}(w)$ und $v=\mathrm{starkRand}(u)=\mathrm{starkRand}^2(w)$.
+\item[I.\,S.] Für $d\geq 3$ ex.\ $u=\mathrm{starkRand}(w)$ und $v=\mathrm{starkRand}(u)=\mathrm{starkRand}^2(w)$.\pause
 
-Nach I.\,V.\ gilt für beide: $\vert u\vert\geq F_{d+1}-2$ und $\vert v\vert\geq F_d-2$. Wegen Lemma \ref{lem:stark} gilt dann: \[\vert w\vert\geq \vert u\vert+\vert v\vert+2\geq F_{d+1}-2+F_d-2+2=F_{d+2}-2\]
+Nach I.\,V.\ gilt: $\vert u\vert\geq F_{d+1}-2$ und $\vert v\vert\geq F_d-2$.
+
+Wegen Lemma 2 gilt dann: \[\vert w\vert\geq \vert u\vert+\vert v\vert+2\geq F_{d+1}-2+F_d-2+2=F_{d+2}-2\]
 Induktionsschluss.
-\end{description}\medskip
+\end{description}\medskip\pause
 
 Es ist bekannt, dass $F_d\geq \frac{\phi^d}{\sqrt{5}}$. Wir erhalten $\vert w\vert\geq\phi^d-2$, und schließlich $m+1\geq\phi^d$ bzw.\ $d\leq\log_\phi(m+1)$.\qed 
 \end{frame}
